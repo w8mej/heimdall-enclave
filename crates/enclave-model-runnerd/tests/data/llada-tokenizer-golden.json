@@ -1,0 +1,83 @@
+{
+  "reference": "tokenizers 0.21.0",
+  "tokenizer_sha256": "071eb20fe7bd601550b1b7838ff696d6c93b88f51257f753303d3df23163c381",
+  "vocab": 126349,
+  "cases": [
+    {
+      "text": "Hello, world!",
+      "ids": [14455, 11, 1931, 0],
+      "decoded": "Hello, world!"
+    },
+    {
+      "text": "I'll say it's what we'd've done. DON'T, Won't, y'all",
+      "ids": [
+        40, 4164, 2204, 403, 698, 1053, 438, 5800, 3868, 3226, 13, 64831, 33375,
+        11, 48741, 1227, 11, 340, 88386
+      ],
+      "decoded": "I'll say it's what we'd've done. DON'T, Won't, y'all"
+    },
+    {
+      "text": "Order 12345 shipped on 2026-11-18 at 09:30.",
+      "ids": [
+        10826, 220, 16, 17, 18, 19, 20, 29497, 366, 220, 17, 15, 17, 21, 12, 16,
+        16, 12, 16, 23, 482, 220, 15, 24, 25, 18, 15, 13
+      ],
+      "decoded": "Order 12345 shipped on 2026-11-18 at 09:30."
+    },
+    {
+      "text": "line one\nline two\n\n\nline five\r\n",
+      "ids": [1291, 810, 198, 1291, 1307, 198, 198, 198, 1291, 4428, 201, 198],
+      "decoded": "line one\nline two\n\n\nline five\r\n"
+    },
+    {
+      "text": "tabs\tand   spaces     end   ",
+      "ids": [75564, 197, 457, 256, 11435, 263, 1389, 305],
+      "decoded": "tabs\tand   spaces     end   "
+    },
+    {
+      "text": "Café vs Café: éé",
+      "ids": [34, 2610, 2900, 7551, 65097, 25, 18878, 2900],
+      "decoded": "Café vs Café: éé"
+    },
+    {
+      "text": "漢字とかな混じり文",
+      "ids": [1675, 95, 1983, 14410, 17856, 14052, 4591, 58738, 22803, 1003],
+      "decoded": "漢字とかな混じり文"
+    },
+    {
+      "text": "emoji 😀🚀 and flags 🇺🇸",
+      "ids": [
+        86471, 65150, 114055, 222, 301, 13584, 8811, 229, 118, 66846, 116
+      ],
+      "decoded": "emoji 😀🚀 and flags 🇺🇸"
+    },
+    {
+      "text": "{\"priority\":\"urgent\"}",
+      "ids": [12657, 64185, 12439, 5625, 310, 9289],
+      "decoded": "{\"priority\":\"urgent\"}"
+    },
+    {
+      "text": "!!!??? ... --- *** ((()))",
+      "ids": [18546, 52306, 3642, 22351, 35489, 5217, 29053],
+      "decoded": "!!!??? ... --- *** ((()))"
+    },
+    {
+      "text": "   leading spaces",
+      "ids": [256, 6135, 11435],
+      "decoded": "   leading spaces"
+    },
+    {
+      "text": "<|startoftext|>a<|endoftext|>",
+      "ids": [126080, 64, 126081],
+      "decoded": "<|startoftext|>a<|endoftext|>"
+    }
+  ],
+  "special_tokens": {
+    "<|startoftext|>": 126080,
+    "<|endoftext|>": 126081,
+    "<|mdm_mask|>": 126336,
+    "<|eot_id|>": 126348,
+    "<|start_header_id|>": 126346,
+    "<|end_header_id|>": 126347
+  }
+}

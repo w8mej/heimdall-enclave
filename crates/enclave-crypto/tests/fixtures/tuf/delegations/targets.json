@@ -1,0 +1,37 @@
+{
+  "signatures": [
+    {
+      "keyid": "5b9b1af28a1869bdd0b7e8beee9b9c2f9f656e85aeff76b1cb57e62ea2deaed7",
+      "sig": "d754d777628ab8f42d9d2cf7a0c412deef95bea9b218164ca78df807b2761f8f0f1c298785f1eae95b8ce144414d12199eb5e0b0612a06bbf43291e6fac78807"
+    }
+  ],
+  "signed": {
+    "_type": "targets",
+    "delegations": {
+      "keys": {
+        "ea640c81661e57e622c1b2706e5b816340c480273050b6862c0990d2f0a75cd4": {
+          "keytype": "ed25519",
+          "keyval": {
+            "public": "775a67f8d0597d399b41c7f12774490d4a8909b1f081a8bf89232b18c4804954"
+          },
+          "scheme": "ed25519"
+        }
+      },
+      "roles": [
+        {
+          "keyids": [
+            "ea640c81661e57e622c1b2706e5b816340c480273050b6862c0990d2f0a75cd4"
+          ],
+          "name": "models",
+          "paths": ["models/*"],
+          "terminating": false,
+          "threshold": 1
+        }
+      ]
+    },
+    "expires": "2035-01-01T00:00:00Z",
+    "spec_version": "1.0.31",
+    "targets": {},
+    "version": 1
+  }
+}

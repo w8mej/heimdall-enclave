@@ -1,0 +1,37 @@
+#!/bin/sh
+# preinstall — Prepare accounts and system directories before payload extraction (FS-706 / D-R10)
+set -eu
+
+# Before flat-package extraction can replace a privileged executable or trust,
+# drain its callers and establish the same durable barrier as the canonical
+# installer. Keep a nonempty/uncertain broker available for explicit retraction.
+PATH=/usr/bin:/bin:/usr/sbin:/sbin
+export PATH
+if [ -d /var/db/enclave/apfs-broker ]; then
+  for label in com.enterprise.enclave.hydrate com.enterprise.enclave.cas; do
+    if launchctl print "system/$label" >/dev/null 2>&1; then
+      launchctl bootout "system/$label" || exit 1
+      i=0; while launchctl print "system/$label" >/dev/null 2>&1 && [ "$i" -lt 60 ]; do sleep 0.1; i=$((i + 1)); done
+      if launchctl print "system/$label" >/dev/null 2>&1; then echo 'preinstall: CAS did not stop; broker retained'; exit 1; fi
+    fi
+  done
+  /opt/enterprise/enclave/bin/enclave-apfs-broker --quiesce-idle || { echo 'preinstall: owned publications or uncertain state; broker retained, CAS safely stopped'; exit 1; }
+  if launchctl print system/com.enterprise.enclave.apfs-broker >/dev/null 2>&1; then
+    launchctl bootout system/com.enterprise.enclave.apfs-broker || exit 1
+    i=0; while launchctl print system/com.enterprise.enclave.apfs-broker >/dev/null 2>&1 && [ "$i" -lt 60 ]; do sleep 0.1; i=$((i + 1)); done
+    if launchctl print system/com.enterprise.enclave.apfs-broker >/dev/null 2>&1; then echo 'preinstall: broker did not stop; extraction refused'; exit 1; fi
+  fi
+fi
+
+echo "preinstall: Preparing MCPMac Enclave accounts and directories..."
+
+SCRIPT_DIR="$(dirname "$0")"
+
+# Execute provision-accounts if packaged in scripts or on host
+if [ -f "$SCRIPT_DIR/provision-accounts.sh" ]; then
+  sh "$SCRIPT_DIR/provision-accounts.sh"
+elif [ -f "/opt/enterprise/enclave/provision-accounts.sh" ]; then
+  sh "/opt/enterprise/enclave/provision-accounts.sh"
+fi
+
+exit 0

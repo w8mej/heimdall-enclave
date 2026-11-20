@@ -1,0 +1,101 @@
+/-
+Copyright (c) 2026 Enterprise Enclave Authors. All rights reserved.
+SPDX-License-Identifier: Apache-2.0
+
+Enclave Formal Verification Suite in Lean 4
+-/
+
+import Enclave.Lattice
+import Enclave.BibaNoninterference
+import Enclave.QifBound
+import Enclave.ConjunctiveAuth
+import Enclave.HardwareCustody
+import Enclave.AuditChain
+import Enclave.TufAntiRollback
+import Enclave.PacketFilter
+import Enclave.MetalFence
+import Enclave.MultiAgentQifTree
+import Enclave.SmallStepSemantics
+import Enclave.RustModelBridge
+import Enclave.ProbabilisticQif
+import Enclave.StatefulPacketFilter
+import Enclave.SqlAstGuard
+import Enclave.DpopBinding
+import Enclave.CedarSemantics
+import Enclave.BaoStreamVerification
+import Enclave.StarkAirSoundness
+import Enclave.LeftoverLocalsDefense
+import Enclave.EphemeralDelegation
+import Enclave.SepAntiRollback
+import Enclave.PagedAttentionIsolation
+import Enclave.ContextDagProvenance
+import Enclave.CrashConsistencyWal
+import Enclave.ExtractionGapDefense
+import Enclave.TierTwoAssurance
+import Enclave.TierThreeAssurance
+import Enclave.ConstantTimeSemantics
+import Enclave.SeatbeltCapabilityMonotonicity
+import Enclave.PeerTokenPidReuseImmunity
+import Enclave.RssMemoryCeilingAccounting
+import Enclave.SpeculativeVerificationGate
+import Enclave.FixedPointQ16ArithSafety
+import Enclave.WasiCapabilitySandbox
+import Enclave.DelegationTreeConservation
+import Enclave.CompositionalNoninterference
+import Enclave.HybridKdfCombiner
+import Enclave.ZkWitnessUniqueness
+import Enclave.FriProximitySoundness
+import Enclave.HpkeAuthEncapSoundness
+import Enclave.CrashConsistentRecovery
+import Enclave.UsbYankZeroization
+
+-- Protocol-level extension suite: see COVERAGE.md for exact objectives/boundaries.
+import Enclave.TicketProtocol
+import Enclave.DelegationProtocol
+import Enclave.DelegationAccounting
+import Enclave.CapabilityProtocol
+import Enclave.HeapAccounting
+import Enclave.PlanSafety
+import Enclave.TraceNoninterference
+import Enclave.AuthorizationProtocol
+import Enclave.DpopProtocol
+import Enclave.TufProtocol
+import Enclave.LedgerProtocol
+import Enclave.ArtifactProtocol
+import Enclave.LifecycleProtocol
+import Enclave.CustodyProtocol
+import Enclave.CustodyLifecycle
+import Enclave.EgressProtocol
+import Enclave.NormalizedQif
+import Enclave.DagProtocol
+import Enclave.AutomataProtocol
+import Enclave.IpcProtocol
+import Enclave.MerkleProtocol
+import Enclave.EpochAirArithmetic
+import Enclave.PacketPolicy
+import Enclave.FieldRangeProofs
+import Enclave.AdaptiveQif
+import Enclave.FractionalQif
+import Enclave.RollingQif
+import Enclave.RollingQifRefinement
+import Enclave.RollingAdaptiveComposition
+import Enclave.AdaptiveBudget
+import Enclave.EpochAirCorrespondence
+import Enclave.EpochAirSlotCoverage
+import Enclave.SchemaAutomata
+import Enclave.RollingKeyNormalization
+import Enclave.FallibleQif
+import Enclave.DelegatedAdaptiveComposition
+import Enclave.EgressFinalization
+import Enclave.EgressAttestorComposition
+import Enclave.MerkleIndexBinding
+
+import Enclave.TransportAdmission
+import Enclave.SnapshotBrokerProtocol
+import Enclave.NamespaceKeyringProtocol
+import Enclave.SwarmAuthorization
+import Enclave.TransportClosure
+import Enclave.TransportStartup
+import Enclave.RustGuardSemantics
+import Enclave.TransportGuardSource
+import Enclave.TransportGuardRefinement

@@ -1,0 +1,48 @@
+name: "🐛 Defect / Bug Report"
+description: "Report a bug, crash, or unexpected behavior in a Heimdall-Enclave daemon or test harness."
+title: "[BUG]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting an issue! If this report involves an unpatched security vulnerability or bypass of a zero-trust boundary, please report it via the **Security** tab instead.
+  - type: dropdown
+    id: component
+    attributes:
+      label: Affected Subsystem / Daemon
+      description: Select which component exhibited the issue.
+      options:
+        - "UID 701: enclave-model-runnerd (Model Adapter Host)"
+        - "UID 702: enclave-swarm-syncd (Swarm CAS & TUF)"
+        - "UID 703: enclave-custody-vaultd (SEP & Hardware Custody)"
+        - "UID 704: enclave-agent-runtime (Cedar/Biscuit IFC Engine)"
+        - "UID 705: enclave-zk-auditor (Silicon EMTE & Plonky3 ZK)"
+        - "Supervisor & CLI: mcp-enclave / launchd"
+        - "Core Libraries: enclave-core / enclave-crypto"
+        - "Verification Suites & Scripts"
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment & Hardware Specification
+      description: "Hardware chip (e.g., Apple M1 Max, M3 Pro, M4, Linux CI VM) and OS version (macOS 14.5 Sonoma, 15.1 Sequoia)."
+      placeholder: "e.g., Apple M3 Pro, macOS 15.0 Sequoia, 36GB Unified Memory"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Problem Description & Expected Behavior
+      description: Describe what happened and what you expected to happen.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce & Terminal Output
+      description: Provide the command line, test case, or log snippet illustrating the failure.
+      render: shell
+    validations:
+      required: true

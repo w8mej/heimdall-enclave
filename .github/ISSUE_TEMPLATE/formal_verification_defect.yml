@@ -1,0 +1,82 @@
+name: "📐 Formal Verification / Lean 4 Proof Gap"
+description: "Report a mathematical soundness gap, axiom discrepancy, or semantic model mismatch in the Lean 4 formal proof suite."
+title: "[PROOFS]: "
+labels: ["formal-methods/lean4", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Heimdall-Enclave maintains **43 mechanized Lean 4 formal verification modules** (`proofs/lean4/Enclave/`) proving zero-trust information flow, cryptographic combiners, crash consistency, and microarchitectural timing invariance with **0 unproven `sorry` axioms**.
+
+        Use this template to report proof gaps, over-simplifying model assumptions, missing pre-conditions, or discrepancies between Lean theorems and the native Rust implementations.
+  - type: dropdown
+    id: proof_module
+    attributes:
+      label: Affected Proof Module
+      description: Select the Lean 4 proof module under proofs/lean4/Enclave/
+      options:
+        - "Enclave/AuditChain.lean (Hash chain tamper-evidence)"
+        - "Enclave/BaoStreamVerification.lean (Verified streaming tree hashes)"
+        - "Enclave/BibaNoninterference.lean (Lattice integrity & noninterference)"
+        - "Enclave/CompositionalNoninterference.lean (Parallel composition M1 x M2)"
+        - "Enclave/ConstantTimeSemantics.lean (Microarchitectural timing invariance)"
+        - "Enclave/CrashConsistencyWal.lean (WAL crash safety)"
+        - "Enclave/CrashConsistentRecovery.lean (SEP NVRAM / APFS atomicity)"
+        - "Enclave/DelegationTreeConservation.lean (Agent fuel conservation)"
+        - "Enclave/DpopBinding.lean (Proof-of-possession token binding)"
+        - "Enclave/EphemeralDelegation.lean (Ephemeral delegation lifetime)"
+        - "Enclave/FixedPointQ16ArithSafety.lean (Q16.16 overflow bounds)"
+        - "Enclave/FriProximitySoundness.lean (Plonky3 FRI folding soundness)"
+        - "Enclave/HpkeAuthEncapSoundness.lean (RFC 9180 AuthEncap integrity)"
+        - "Enclave/HybridKdfCombiner.lean (NIST SP 800-227 dual-PRF reduction)"
+        - "Enclave/LeftoverLocalsDefense.lean (GPU memory zeroization)"
+        - "Enclave/PacketFilter.lean (Darwin pf state table invariance)"
+        - "Enclave/PagedAttentionIsolation.lean (KV cache non-leakage)"
+        - "Enclave/PeerTokenPidReuseImmunity.lean (audit_token_t generation tags)"
+        - "Enclave/RssMemoryCeilingAccounting.lean (Mach 152 MiB RSS ceiling)"
+        - "Enclave/SeatbeltCapabilityMonotonicity.lean (Seatbelt .sb narrowing)"
+        - "Enclave/SepAntiRollback.lean (Hardware monotonic counter bounds)"
+        - "Enclave/SpeculativeVerificationGate.lean (Draft verification & ECE <= 0.015)"
+        - "Enclave/TierTwoAssurance.lean / TierThreeAssurance.lean"
+        - "Enclave/TufAntiRollback.lean (TUF metadata replay resistance)"
+        - "Enclave/UsbYankZeroization.lean (Hardware yank volatile destruction)"
+        - "Enclave/WasiCapabilitySandbox.lean (Linear memory bounds)"
+        - "Enclave/ZkWitnessUniqueness.lean (STARK AIR determinism)"
+    validations:
+      required: true
+  - type: input
+    id: theorem_name
+    attributes:
+      label: Theorem / Lemma / Invariant Name
+      description: The exact identifier within the Lean file.
+      placeholder: "e.g., theorem constant_time_stride_invariance or def is_sound_recovery"
+    validations:
+      required: true
+  - type: dropdown
+    id: defect_class
+    attributes:
+      label: Formal Defect Classification
+      description: What is the nature of the proof issue?
+      options:
+        - "Soundness Gap (Theorem statement does not imply intended physical security property)"
+        - "Model Mismatch (Lean formalization abstracts away real hardware/OS behavior)"
+        - "Premise Vacuity (Pre-conditions are contradictory or unrealistically restrictive)"
+        - "Lean 4 Version Incompatibility / Syntax Drift"
+        - "Missing Boundary Theorem (Unproven edge case in composition)"
+    validations:
+      required: true
+  - type: textarea
+    id: discrepancy_analysis
+    attributes:
+      label: Discrepancy Explanation & Counter-Example
+      description: Provide an exact analysis of why the mathematical formulation is flawed or presents a counter-example.
+    validations:
+      required: true
+  - type: textarea
+    id: proposed_proof
+    attributes:
+      label: Proposed Mechanized Proof / Theorem Revision
+      description: Provide the revised Lean 4 theorem formulation or proof snippet.
+      render: lean
+    validations:
+      required: false

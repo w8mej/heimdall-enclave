@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.enterprise.enclave.supervisor</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/opt/enterprise/enclave/bin/mcp-enclave</string>
+		<string>--profile</string>
+		<string>L2</string>
+		<string>supervise</string>
+		<string>--socket-dir</string>
+		<string>/var/run/enclave</string>
+	</array>
+	<key>UserName</key>
+	<string>root</string>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<true/>
+	<key>ThrottleInterval</key>
+	<integer>10</integer>
+	<key>ProcessType</key>
+	<string>Interactive</string>
+	<key>MachServices</key>
+	<dict>
+		<key>com.enterprise.enclave.exception</key>
+		<true/>
+	</dict>
+	<key>StandardOutPath</key>
+	<string>/var/log/enclave/supervisor.log</string>
+	<key>StandardErrorPath</key>
+	<string>/var/log/enclave/supervisor.log</string>
+</dict>
+</plist>

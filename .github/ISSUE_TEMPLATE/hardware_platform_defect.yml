@@ -1,0 +1,78 @@
+name: "🍎 Apple Silicon Hardware & Platform Defect"
+description: "Report an Apple Silicon hardware incompatibility, Darwin kernel sandbox panic, SEP custody failure, or Touch ID defect."
+title: "[HW]: "
+labels: ["subsystem/kernel-pf", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Heimdall-Enclave relies on deep Darwin kernel and Apple Silicon hardware primitives (Apple Secure Enclave, Touch ID biometric evaluation, Mach exception ports, Seatbelt `.sb` sandbox profiles, and kernel Packet Filter `pfctl`).
+
+        Use this template to file hardware-level regressions, Mach IPC faults, or platform compatibility defects.
+  - type: dropdown
+    id: soc_model
+    attributes:
+      label: Apple Silicon Hardware Model
+      description: Select your physical machine processor architecture.
+      options:
+        - "Apple M1 / M1 Pro / M1 Max / M1 Ultra"
+        - "Apple M2 / M2 Pro / M2 Max / M2 Ultra"
+        - "Apple M3 / M3 Pro / M3 Max"
+        - "Apple M4 / M4 Pro / M4 Max"
+        - "Apple M5+ (Hardware EMTE & PAC)"
+        - "macOS Virtualization Framework (Apple Silicon VM)"
+        - "Non-macOS / Linux Development Host"
+    validations:
+      required: true
+  - type: dropdown
+    id: macos_version
+    attributes:
+      label: macOS Operating System Release
+      description: Select your macOS version.
+      options:
+        - "macOS 15.1+ Sequoia"
+        - "macOS 15.0 Sequoia"
+        - "macOS 14.5+ Sonoma"
+        - "macOS 14.0–14.4 Sonoma"
+        - "Other / Unsupported"
+    validations:
+      required: true
+  - type: dropdown
+    id: platform_subsystem
+    attributes:
+      label: Affected Platform Subsystem
+      description: Which low-level Darwin / hardware subsystem failed?
+      options:
+        - "Apple Secure Enclave (SEP) & Monotonic NVRAM Counters"
+        - "Touch ID / CoreAuthUI Intent Sheet & Biometric Attestation"
+        - "Mach Exception Ports & Crash Logging"
+        - "Darwin Seatbelt (.sb) Sandbox Enforcement"
+        - "Darwin Kernel Packet Filter (pfctl) Rule Anchor"
+        - "LaunchDaemon POSIX IPC & LOCAL_PEERTOKEN Validation"
+        - "APFS Container Sparse Disk Image (DMG) Hydration"
+        - "FIDO2 / YubiKey CTAP Hardware USB Bridge"
+    validations:
+      required: true
+  - type: textarea
+    id: defect_summary
+    attributes:
+      label: Hardware / Kernel Failure Description
+      description: Describe the exact failure symptoms, error codes, or kernel signals (e.g. SIGKILL, EPERM, KERN_PROTECTION_FAILURE).
+    validations:
+      required: true
+  - type: textarea
+    id: log_output
+    attributes:
+      label: System & Daemon Diagnostic Logs
+      description: Include relevant excerpts from `log stream`, `dmesg`, or daemon logs in `/opt/enterprise/enclave/log/`.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction_steps
+    attributes:
+      label: Reproduction Steps
+      description: Specific sequence of CLI commands or operations to reproduce.
+      render: shell
+    validations:
+      required: true

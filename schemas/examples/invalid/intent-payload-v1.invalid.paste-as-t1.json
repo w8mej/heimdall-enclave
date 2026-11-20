@@ -1,0 +1,28 @@
+{
+  "v": 1,
+  "action_class": "A3",
+  "profile": "L2",
+  "spiffe_id": "spiffe://corporate.internal/enclave/uid/703",
+  "tool_name": "detokenize_row",
+  "canonical_arguments_blake3": "5555555555555555555555555555555555555555555555555555555555555555",
+  "policy_blake3": "6666666666666666666666666666666666666666666666666666666666666666",
+  "qif_millibits_delta": 0,
+  "rpc_seq_u64": 9001,
+  "boot_epoch_id": "6fe7229d-f77c-47ec-b370-69c20118296e",
+  "ts_utc_ms": 1762308012405,
+  "custody_grant": "none",
+  "required_factors": ["SEP_WORKLOAD_KEY", "TOUCH_ID_COREAUTHUI", "YUBIKEY_UP"],
+  "user_turn": {
+    "directive_short": "x",
+    "attachments": [
+      {
+        "handle": "$paste_0",
+        "label": {
+          "c": "C3",
+          "t": "T1"
+        },
+        "blake3": "7777777777777777777777777777777777777777777777777777777777777777"
+      }
+    ]
+  }
+}

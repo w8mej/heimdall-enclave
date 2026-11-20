@@ -1,0 +1,28 @@
+{
+  "v": 1,
+  "model_id": "llada-8b-instruct",
+  "execution_class": "DISCRETE_DIFFUSION",
+  "upstream_checkpoint": "GSAI-ML/LLaDA-8B-Instruct",
+  "artifact": {
+    "cas_uri": "cas://blake3-bao-v1/1111111111111111111111111111111111111111111111111111111111111111",
+    "blake3": "1111111111111111111111111111111111111111111111111111111111111111",
+    "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+    "format": "safetensors"
+  },
+  "tensor_namespace": "enclave_adapter.llada.v1",
+  "stateless_across_rpc": true,
+  "output_caps": {
+    "max_output_bytes": 65536,
+    "max_diffusion_steps": 64
+  },
+  "calibration": {
+    "ece_max": 0.02,
+    "bins": 15,
+    "binning": "equal_mass",
+    "dataset": "enclave-calib-eval-v1"
+  },
+  "license_policy": {
+    "spdx_id": "MIT",
+    "allow_p2p_seeding": false
+  }
+}

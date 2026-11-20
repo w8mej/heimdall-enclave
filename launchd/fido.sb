@@ -1,0 +1,11 @@
+;; com.enterprise.enclave.fido — enclave-fido-emulator (UID 706). Deny by default.
+(version 1)
+(deny default)
+(import "bsd.sb")
+(allow process-exec (literal "/opt/enterprise/enclave/bin/enclave-fido-emulator"))
+(allow file-read* (literal "/opt/enterprise/enclave/bin/enclave-fido-emulator"))
+(allow signal (target self))
+(allow sysctl-read)
+(allow file-read-metadata (literal "/private/var/run/enclave") (literal "/private/var/log/enclave") (literal "/private/var/db/enclave"))
+(allow file-read* file-write* (subpath "/private/var/run/enclave/fido") (subpath "/private/var/log/enclave/fido") (subpath "/private/var/db/enclave/fido"))
+(allow network-bind network-inbound (local unix-socket (subpath "/private/var/run/enclave/fido")))

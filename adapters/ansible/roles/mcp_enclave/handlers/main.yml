@@ -1,0 +1,5 @@
+---
+- name: Restart supervisor
+  ansible.builtin.command:
+    cmd: /bin/launchctl kickstart -k system/com.enterprise.enclave.supervisor
+  changed_when: true

@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "producer": "transformers 4.53.3 VJEPA2Model.encoder float32 (independent reference)",
+  "torch": "2.5.1",
+  "checkpoint": {
+    "repo": "facebook/vjepa2-vitl-fpc64-256",
+    "revision": "b3c1679b7c34d3255ef3547f27c7b226aefab26f",
+    "model_sha256": "25466aef85727d16546c6cf8c99f12fcfad9cbca8225d45f23685e2e025b786b"
+  },
+  "input": "256x256 grey u8 -> RGB, /255, ImageNet mean/std, one frame (repeated to the tubelet)",
+  "cases": [
+    {
+      "name": "gradient",
+      "pixels_sha256": "7daca2095d0438260fa849183dfc67faa459fdf4936e1bc91eec6b281b27e4c2",
+      "pooled_head": [
+        0.344614, 0.363546, 4e-5, -1.194813, -1.571132, -0.59808, 0.007554,
+        0.558876
+      ],
+      "pooled_sum": 47.206,
+      "pooled_norm": 66.42889,
+      "token0_head": [-0.612274, 1.008307, -0.229111, 2.96787],
+      "token137_head": [1.616665, 2.463605, 0.577562, -4.428072]
+    },
+    {
+      "name": "ui_mock",
+      "pixels_sha256": "45a5262c0afc150344f3a380cc03735ae2144639b528ac6a28aa421f181bda96",
+      "pooled_head": [
+        -0.003828, 0.904663, 0.082429, -0.411771, -0.453748, -1.321603,
+        -0.231143, 0.296012
+      ],
+      "pooled_sum": 43.0974,
+      "pooled_norm": 64.51408,
+      "token0_head": [0.580224, -0.696987, 1.314753, 2.505061],
+      "token137_head": [1.477758, 5.427879, -0.615374, -2.544339]
+    },
+    {
+      "name": "flat_91",
+      "pixels_sha256": "62973580cb0d8f44b830898e019c50399ddc804352fbade1f66ee187e9617871",
+      "pooled_head": [
+        0.218518, 1.024537, -0.095305, 0.439536, -0.46463, 0.457166, 0.189064,
+        0.912681
+      ],
+      "pooled_sum": 50.6202,
+      "pooled_norm": 68.86188,
+      "token0_head": [0.217593, 1.023527, -0.092781, 0.441812],
+      "token137_head": [0.219174, 1.025151, -0.097179, 0.437679]
+    },
+    {
+      "name": "flat_64",
+      "pixels_sha256": "a784162071976d61f261a3354d8e0466cf59d6fa9126ee25d98040bcc73db233",
+      "pooled_head": [
+        0.225507, 1.091434, -0.015817, 0.589372, -0.290643, 0.556381, 0.210568,
+        0.903723
+      ],
+      "pooled_sum": 50.6224,
+      "pooled_norm": 69.37956,
+      "token0_head": [0.226032, 1.091955, -0.017335, 0.58791],
+      "token137_head": [0.22326, 1.089116, -0.009781, 0.593501]
+    }
+  ]
+}

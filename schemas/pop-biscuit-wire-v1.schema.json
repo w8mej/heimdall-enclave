@@ -1,0 +1,116 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://mcpmac.invalid/schemas/pop-biscuit-wire-v1.schema.json",
+  "title": "PoPBiscuitWireV1 (JSON view of the CBOR frame)",
+  "description": "ADR-015. CBOR { v, sealed_biscuit, seq_u64, args_blake3, pop_sig_ed25519, transport, clock }. bstr fields are rendered as lowercase hex (sealed_biscuit as base64url) in this JSON view.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "v",
+    "sealed_biscuit",
+    "seq_u64",
+    "args_blake3",
+    "pop_sig_ed25519",
+    "transport",
+    "clock"
+  ],
+  "properties": {
+    "v": {
+      "const": 1
+    },
+    "sealed_biscuit": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]+$",
+      "maxLength": 16384
+    },
+    "seq_u64": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 18446744073709551615
+    },
+    "args_blake3": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "pop_sig_ed25519": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{128}$"
+    },
+    "hop": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 4
+    },
+    "transport": {
+      "enum": ["uds", "mtls_exporter"]
+    },
+    "clock": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "local_boot_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "mach_continuous_time_ns_expiry": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 18446744073709551615
+        },
+        "utc_epoch_ms_expiry": {
+          "type": "integer"
+        },
+        "max_ttl_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 30000
+        },
+        "skew_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2000
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "transport": {
+            "const": "uds"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "clock": {
+            "required": ["local_boot_id", "mach_continuous_time_ns_expiry"],
+            "not": {
+              "required": ["utc_epoch_ms_expiry"]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "transport": {
+            "const": "mtls_exporter"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "clock": {
+            "required": ["utc_epoch_ms_expiry", "max_ttl_ms", "skew_ms"],
+            "not": {
+              "required": ["mach_continuous_time_ns_expiry"]
+            }
+          }
+        }
+      }
+    }
+  ]
+}

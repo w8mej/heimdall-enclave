@@ -1,0 +1,294 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://mcpmac.invalid/schemas/intent-payload-v1.schema.json",
+  "title": "IntentPayloadV1",
+  "description": "FS-703 \u00a73.3: RFC 8785 JCS canonical intent whose SHA-256 is the CTAP 2.1 clientDataHash. Optionally carries the FS-704 UserTurnV1 that produced the plan (ADR-014).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "v",
+    "action_class",
+    "profile",
+    "spiffe_id",
+    "tool_name",
+    "canonical_arguments_blake3",
+    "policy_blake3",
+    "rpc_seq_u64",
+    "boot_epoch_id",
+    "ts_utc_ms",
+    "required_factors"
+  ],
+  "properties": {
+    "v": {
+      "const": 1
+    },
+    "action_class": {
+      "enum": ["A1", "A2", "A3", "A4"]
+    },
+    "profile": {
+      "enum": ["L1", "L2", "L3"]
+    },
+    "spiffe_id": {
+      "type": "string",
+      "pattern": "^spiffe://"
+    },
+    "tool_name": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "canonical_arguments_blake3": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "model_blake3": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "policy_blake3": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "qif_millibits_delta": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 12000
+    },
+    "rpc_seq_u64": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 18446744073709551615
+    },
+    "boot_epoch_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    },
+    "ts_utc_ms": {
+      "type": "integer"
+    },
+    "custody_grant": {
+      "enum": ["none", "Custody::ReversibleTokenize"]
+    },
+    "required_factors": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "SEP_WORKLOAD_KEY",
+          "TOUCH_ID_COREAUTHUI",
+          "YUBIKEY_UP",
+          "YUBIKEY_PIN_UV",
+          "ZK_EGRESS_GATE",
+          "KOFN_ED25519_QUORUM",
+          "OIDC_STEP_UP",
+          "YUBIKEY_PRESENT"
+        ]
+      }
+    },
+    "user_turn": {
+      "$ref": "#/definitions/UserTurnV1"
+    },
+    "schema_version": {
+      "const": "enclave.intent.v1"
+    },
+    "arguments_jcs_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "human_summary_trusted": {
+      "type": "string",
+      "maxLength": 256,
+      "description": "Synthesized by the trusted policy proxy from the parsed AST; never model- or server-supplied"
+    },
+    "row_count_bound": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100000
+    },
+    "target_namespace": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "data_class": {
+      "enum": ["C1", "C2", "C3", "C4"]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "action_class": {
+            "enum": ["A3", "A4"]
+          },
+          "profile": {
+            "enum": ["L2", "L3"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "required_factors": {
+            "allOf": [
+              {
+                "contains": {
+                  "const": "TOUCH_ID_COREAUTHUI"
+                }
+              },
+              {
+                "contains": {
+                  "const": "YUBIKEY_UP"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action_class": {
+            "enum": ["A3", "A4"]
+          },
+          "profile": {
+            "const": "L1"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "required_factors": {
+            "contains": {
+              "const": "TOUCH_ID_COREAUTHUI"
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "L1"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "custody_grant": {
+            "const": "none"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "row_count_bound": {
+            "minimum": 2
+          }
+        },
+        "required": ["row_count_bound"]
+      },
+      "then": {
+        "properties": {
+          "action_class": {
+            "const": "A4"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": "L1"
+          },
+          "data_class": {
+            "const": "C4"
+          }
+        },
+        "required": ["data_class"]
+      },
+      "then": false,
+      "description": "L1 never detokenizes C4 (ADR-007): C4 is erased at ingress"
+    },
+    {
+      "if": {
+        "properties": {
+          "action_class": {
+            "const": "A4"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "required_factors": {
+            "contains": {
+              "const": "OIDC_STEP_UP"
+            }
+          }
+        }
+      },
+      "description": "A4 retains baseline IdP step-up in every higher profile; key/UV/quorum do not waive inherited factors (YKD-08)."
+    }
+  ],
+  "definitions": {
+    "UserTurnV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["directive_short", "attachments"],
+      "properties": {
+        "directive_short": {
+          "type": "string",
+          "maxLength": 512,
+          "description": "T1 directive. JSON Schema maxLength counts code points; implementations MUST additionally enforce <= 512 UTF-8 bytes (FS-704 \u00a73.1.1)."
+        },
+        "attachments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["handle", "label", "blake3"],
+            "properties": {
+              "handle": {
+                "type": "string",
+                "pattern": "^\\$paste_[0-9]+$"
+              },
+              "label": {
+                "allOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["c", "t"],
+                    "properties": {
+                      "c": {
+                        "enum": ["C1", "C2", "C3", "C4"]
+                      },
+                      "t": {
+                        "enum": ["T0", "T1", "T2", "T3"]
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "t": {
+                        "const": "T3"
+                      }
+                    }
+                  }
+                ]
+              },
+              "blake3": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "kind": {
+                "enum": ["paste", "file", "stacktrace", "clipboard", "url"]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

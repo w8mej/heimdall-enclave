@@ -1,0 +1,46 @@
+[package]
+name = "enclave-model-runnerd"
+description = "UID 701 _llmagent: EnclaveModelAdapter for the six post-autoregressive ExecutionClasses (FS-701)"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+enclave-core = { path = "../enclave-core" }
+enclave-crypto = { path = "../enclave-crypto" }
+serde.workspace = true
+serde_json.workspace = true
+serde_bytes.workspace = true
+ciborium.workspace = true
+hex.workspace = true
+blake3.workspace = true
+sha2.workspace = true
+libc.workspace = true
+half = "2.4"
+unicode-normalization.workspace = true
+url = "2.5"
+# Closed byte-level BPE pre-tokenizer pattern (needs lookahead).
+fancy-regex = "0.16"
+
+[features]
+default = []
+# Native MLX compute worker linking the system libmlxc (L1 alpha M1).
+# Development backend; see docs/L1_ALPHA_ROADMAP.md.
+mlx-native = []
+
+[[bin]]
+name = "enclave-model-runnerd"
+path = "src/main.rs"
+
+[[bin]]
+name = "enclave-mlx-worker"
+path = "src/bin/enclave-mlx-worker/main.rs"
+required-features = ["mlx-native"]
+
+[build-dependencies]
+cc.workspace = true
+
+[lints]
+workspace = true

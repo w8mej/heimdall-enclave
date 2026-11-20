@@ -1,0 +1,51 @@
+[package]
+name = "enclave-swarm-syncd"
+description = "UID 702 _enclavecas: TUF 4-role admission, pinned FastCDC + dual-hash CAS, pre-admission model sanitizer, swarm governance (FS-702)"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+enclave-core = { path = "../enclave-core" }
+enclave-crypto = { path = "../enclave-crypto" }
+enclave-custody-vaultd = { path = "../enclave-custody-vaultd" }
+enclave-zk-auditor = { path = "../enclave-zk-auditor" }
+serde.workspace = true
+serde_json.workspace = true
+serde_bytes.workspace = true
+hex.workspace = true
+blake3.workspace = true
+sha2.workspace = true
+libc.workspace = true
+ed25519-dalek.workspace = true
+rand_core.workspace = true
+chacha20poly1305.workspace = true
+subtle.workspace = true
+rand.workspace = true
+rustls.workspace = true
+tokio.workspace = true
+x509-parser.workspace = true
+quinn = { version = "=0.11.9", default-features = false, features = ["runtime-tokio", "rustls-ring"] }
+ciborium.workspace = true
+zeroize.workspace = true
+ohttp-rfc = { package = "ohttp", version = "=0.8.0", default-features = false, features = ["client", "server", "rust-hpke"] }
+# MCPMac uses the unconditional synchronous outboard/stream verification APIs.
+# Upstream `validate` scans existing outboard ranges and pulls in a generator;
+# it is separate from the DecodeResponseIter verification used in bao.rs.
+bao-tree = { version = "0.17.0", default-features = false }
+
+[features]
+default = []
+l1-fuse = []
+
+[dev-dependencies]
+rcgen.workspace = true
+ledger-gateway = { path = "../../services/ledger-gateway" }
+
+[lints]
+workspace = true
+
+[build-dependencies]
+cc.workspace = true

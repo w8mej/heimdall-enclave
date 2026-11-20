@@ -1,0 +1,36 @@
+{
+  "v": 1,
+  "model_id": "v-jepa-2-planner",
+  "execution_class": "JEPA_EBM_WORLD_PLANNER",
+  "upstream_checkpoint": "facebook/vjepa2",
+  "artifact": {
+    "cas_uri": "cas://blake3-bao-v1/3333333333333333333333333333333333333333333333333333333333333333",
+    "blake3": "3333333333333333333333333333333333333333333333333333333333333333",
+    "sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+    "format": "safetensors"
+  },
+  "tensor_namespace": "enclave_adapter.vjepa2.v1",
+  "stateless_across_rpc": true,
+  "output_caps": {
+    "max_output_bytes": 4096
+  },
+  "calibration": {
+    "ece_max": 0.015,
+    "bins": 15,
+    "binning": "equal_mass",
+    "dataset": "enclave-calib-eval-v1"
+  },
+  "world_planner_caps": {
+    "max_horizon": 5,
+    "max_candidates": 64,
+    "max_cem_iters": 4,
+    "e_max": 1000.0,
+    "step_wallclock_ms": 150,
+    "tau_surprise": 0.35,
+    "actuation_sandbox": "cdp_browser"
+  },
+  "license_policy": {
+    "spdx_id": "LicenseRef-vendor",
+    "allow_p2p_seeding": false
+  }
+}

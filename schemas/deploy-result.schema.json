@@ -1,0 +1,105 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://mcpmac.invalid/schemas/deploy-result.schema.json",
+  "title": "deploy-result.json",
+  "description": "Standardized execution result schema for mcp-enclave deploy (FS-706 §1.2, D-R1).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "verb",
+    "profile",
+    "exit_code",
+    "status",
+    "summary",
+    "timestamp"
+  ],
+  "properties": {
+    "verb": {
+      "type": "string",
+      "enum": [
+        "preflight",
+        "install",
+        "verify",
+        "hydrate",
+        "healthcheck",
+        "purge"
+      ],
+      "description": "The deployment verb executed."
+    },
+    "profile": {
+      "type": "string",
+      "enum": ["L1", "L2", "L3"],
+      "description": "Workstation deployment maturity tier."
+    },
+    "exit_code": {
+      "type": "integer",
+      "description": "Deterministic POSIX exit code per D-R1."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ok",
+        "pending",
+        "incomplete",
+        "failed",
+        "unhealthy",
+        "refused",
+        "usage_error"
+      ],
+      "description": "High-level status classification."
+    },
+    "summary": {
+      "type": "string",
+      "description": "Human-readable summary of the operation result."
+    },
+    "details": {
+      "type": "object",
+      "description": "Optional verb-specific execution details or structured diagnostics."
+    },
+    "timestamp": {
+      "type": "integer",
+      "description": "Unix timestamp in seconds."
+    },
+    "darwin_preflight": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hw_tier",
+        "mem_bytes",
+        "disk_free_bytes",
+        "filevault",
+        "sip",
+        "console_uid"
+      ],
+      "properties": {
+        "hw_tier": {
+          "type": "string",
+          "enum": ["Low", "Mid", "High"],
+          "description": "Apple Silicon unified memory classification per D-R13."
+        },
+        "mem_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Total host unified RAM in bytes from sysctl hw.memsize."
+        },
+        "disk_free_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Free space in bytes on target APFS volume."
+        },
+        "filevault": {
+          "type": "boolean",
+          "description": "Whether macOS FileVault volume encryption is active."
+        },
+        "sip": {
+          "type": "boolean",
+          "description": "Whether macOS System Integrity Protection is enabled."
+        },
+        "console_uid": {
+          "type": ["integer", "null"],
+          "description": "Active console user UID from /dev/console, or null if login window."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.enterprise.enclave.browser</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/usr/bin/sandbox-exec</string>
+		<string>-f</string>
+		<string>/opt/enterprise/enclave/sandbox/browser.sb</string>
+		<string>/opt/enterprise/enclave/bin/enclave-cdp-browser</string>
+		<string>--socket</string>
+		<string>/var/run/enclave/browser/browser.sock</string>
+		<string>--throwaway-dir</string>
+		<string>/var/db/enclave/browser</string>
+	</array>
+	<key>UserName</key>
+	<string>_cdpbrowser</string>
+	<key>GroupName</key>
+	<string>_cdpbrowser</string>
+	<key>InitGroups</key>
+	<true/>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<dict>
+		<key>SuccessfulExit</key>
+		<false/>
+	</dict>
+	<key>ThrottleInterval</key>
+	<integer>10</integer>
+	<key>ProcessType</key>
+	<string>Background</string>
+	<key>Umask</key>
+	<integer>63</integer>
+	<key>SoftResourceLimits</key>
+	<dict>
+		<key>Core</key>
+		<integer>0</integer>
+	</dict>
+	<key>HardResourceLimits</key>
+	<dict>
+		<key>Core</key>
+		<integer>0</integer>
+	</dict>
+	<key>StandardOutPath</key>
+	<string>/var/log/enclave/browser/browser.log</string>
+	<key>StandardErrorPath</key>
+	<string>/var/log/enclave/browser/browser.log</string>
+</dict>
+</plist>

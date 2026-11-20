@@ -1,0 +1,17 @@
+# ==============================================================================
+# Apple Silicon macOS Packet Filter (pf) Rules — CAS Swarm & Quarantine
+# Anchor: com.enterprise.cas.swarm
+# ==============================================================================
+
+cas_group = "_enclavecas"
+
+# BEGIN MCPMAC PF RULES
+# 1. FUSE-T loopback isolation: block interactive user 501 from port 2049
+block drop log (all) quick on lo0 inet  proto tcp from any to 127.0.0.1 port 2049 user 501
+block drop log (all) quick on lo0 inet6 proto tcp from any to ::1       port 2049 user 501
+pass quick on lo0 inet  proto tcp from any to 127.0.0.1 port 2049 user 0 keep state
+pass quick on lo0 inet6 proto tcp from any to ::1       port 2049 user 0 keep state
+block drop log (all) quick on lo0 proto tcp from any to any port 2049
+# 2. Permit outbound swarm and HTTPS/TUF traffic for _enclavecas
+pass out quick proto { tcp, udp } from any to any group $cas_group keep state
+# END MCPMAC PF RULES

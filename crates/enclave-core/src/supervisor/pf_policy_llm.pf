@@ -1,0 +1,32 @@
+# ==============================================================================
+# Apple Silicon macOS Packet Filter (pf) Rules — v1.0-Legacy egress quarantine
+# Anchor: com.enterprise.llm.isolation
+# Remediates F-010 (ADVERSARIAL_SPEC_REVIEW_2026-11-04)
+# ==============================================================================
+#
+# Threat Model Invariant (CORE-V1 Invariant 1):
+#   Processes in group _llmagent may reach ONLY the Envoy mTLS gateway (8443) and the
+#   local inference server (11434) on loopback. Everything else — OPA admin (8181/9191),
+#   the raw MCP backend (8080), Envoy admin, DNS, ICMP and ICMPv6, IPv4 and IPv6 — is denied.
+#
+# Ordering matters: pf `quick` stops evaluation at the FIRST matching rule, so the narrow
+# loopback `pass ... quick` rules MUST precede the default-deny `block ... quick` rules.
+#
+# Load (operator step; bootstrap-laptop.sh never loads it automatically):
+#   sudo pfctl -a com.enterprise.llm.isolation -f gateway/pf-rules.conf && sudo pfctl -E
+# Validate without loading:
+#   sudo pfctl -vnf gateway/pf-rules.conf
+# The rule block below is mirrored byte-for-byte in docs/ARCHITECTURE_SPEC.md §6.2 and
+# docs/SRE_RUNBOOKS.md §2.2; scripts/verify-enclave.sh (V05/V06) enforces both.
+
+loopback_if = "lo0"
+llm_group   = "_llmagent"
+
+# BEGIN MCPMAC PF RULES
+# 1. Permit ONLY Envoy mTLS ingress (8443) and local inference (11434) on lo0 — NEVER 8181, 9191, 8080 or Envoy admin.
+pass out quick on $loopback_if inet  proto tcp from any to 127.0.0.1 port { 8443, 11434 } group $llm_group keep state
+pass out quick on $loopback_if inet6 proto tcp from any to ::1       port { 8443, 11434 } group $llm_group keep state
+# 2. Default-deny ALL other IPv4 and IPv6 egress (TCP, UDP, ICMP, ICMPv6) from the agent group.
+block drop out log (all) quick inet  from any to any group $llm_group
+block drop out log (all) quick inet6 from any to any group $llm_group
+# END MCPMAC PF RULES

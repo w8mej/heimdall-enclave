@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>com.enterprise.enclave.core</string>
+	<key>display_name</key>
+	<string>MCPMac Enterprise Enclave Core</string>
+	<key>description</key>
+	<string>Privilege-separated frontier AI inference enclave and security runtime.</string>
+	<key>version</key>
+	<string>3.0.0</string>
+	<key>minimum_os_version</key>
+	<string>14.0.0</string>
+	<key>supported_architectures</key>
+	<array>
+		<string>arm64</string>
+	</array>
+	<key>installer_type</key>
+	<string>apple_pkg</string>
+	<key>installcheck_script</key>
+	<string>#!/bin/sh
+PROFILE=${ENCLAVE_PROFILE-L2}
+case "$PROFILE" in
+  L1|L2|L3) ;;
+  *) echo 'Invalid ENCLAVE_PROFILE; expected L1, L2 or L3' &gt;&amp;2; exit 0 ;;
+esac
+CLI=/opt/enterprise/enclave/bin/mcp-enclave
+# Munki: 1 means skip installation; only a successful valid healthy observation qualifies.
+if JSON=$("$CLI" deploy healthcheck --profile "$PROFILE" --json 2&gt;/dev/null); then
+  STATUS=$(printf '%s' "$JSON" | /usr/bin/plutil -extract details.overall_status raw -o - - 2&gt;/dev/null) || exit 0
+  [ "$STATUS" != healthy ] || exit 1
+fi
+exit 0
+</string>
+	<key>uninstall_script</key>
+	<string>#!/bin/sh
+/opt/enterprise/enclave/bin/mcp-enclave deploy purge --profile L1 --yes
+exit 0
+    </string>
+</dict>
+</plist>

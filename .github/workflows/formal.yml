@@ -1,0 +1,62 @@
+name: Pinned Lean model compilation
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  formal:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Check formal workflow wiring and gate failure propagation
+        shell: bash
+        working-directory: .
+        run: |
+          python3 -m pip install 'PyYAML==6.0.2'
+          python3 scripts/check-formal-ci.py
+          python3 scripts/tests/test_formal_ci.py
+          python3 scripts/tests/test_lean_gate_process.py
+      - name: Install pinned Lean toolchain
+        shell: bash
+        working-directory: .
+        run: ./scripts/install-lean-toolchain.sh
+      - name: Fetch locked mathematics dependencies and cache
+        shell: bash
+        working-directory: proofs/lean4
+        run: |
+          export PATH="$HOME/.elan/bin:$PATH"
+          lake exe cache get
+      - name: Mandatory Lean compiler gate
+        shell: bash
+        working-directory: .
+        run: |
+          export PATH="$HOME/.elan/bin:$PATH"
+          python3 scripts/check-lean.py
+          python3 scripts/tests/test_lean_gate.py
+      - name: Production and model correspondence
+        run: |
+          export PATH="$HOME/.elan/bin:$PATH"
+          python3 scripts/check-formal-correspondence.py
+          python3 scripts/check-protocol-correspondence.py
+          python3 scripts/check-authorization-correspondence.py
+          python3 scripts/check-context-correspondence.py
+          python3 scripts/extract-epoch-air.py
+          cargo test --locked -p enclave-zk-auditor --test air_range --test budget_width --test hvzk
+          cargo test --locked -p enclave-agent-runtime --test conjunctive_pdp delegation
+          cargo test --locked -p enclave-agent-runtime --lib
+          cargo test --locked -p enclave-core --lib qif::tests
+          cargo test --locked -p enclave-core --lib egress::tests
+          python3 scripts/check-lean.py
+      - name: Preserve compiler provenance
+        if: always()
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        with:
+          name: lean-build-provenance
+          path: reports/lean-build.json
+          if-no-files-found: error

@@ -1,0 +1,45 @@
+# CODEOWNERS for Heimdall-Enclave (formerly MCPMac)
+# Defines authoritative security review teams for sensitive components.
+# Enforces mandatory 2-person security review on all cryptosystems, policies, and kernel interfaces.
+
+# Default maintainers for general project state
+*                                    @OWNER_ORG/maintainers
+
+# Cryptographic Protocols & Enclave Core Primitives (Dual-key HPKE, DPoP, PoP-Biscuit, Poseidon2, Plonky3)
+/crates/enclave-core/                @OWNER_ORG/crypto-reviewers @OWNER_ORG/security-architects
+/crates/enclave-crypto/              @OWNER_ORG/crypto-reviewers @OWNER_ORG/security-architects
+/crates/enclave-zk-auditor/          @OWNER_ORG/crypto-reviewers @OWNER_ORG/zk-engineers
+
+# Hardware Custody, SEP Vault, FIDO2/CTAP2 & Touch ID Bridge (UID 703)
+/crates/enclave-custody-vaultd/      @OWNER_ORG/hardware-security @OWNER_ORG/security-architects
+
+# Agent Information Flow Control (IFC), Cedar Policy Engine & UserTurnV1 Prompt Boundary (UID 704)
+/crates/enclave-agent-runtime/       @OWNER_ORG/ai-security @OWNER_ORG/policy-engineers
+/crates/enclave-agent-runtime/policies/ @OWNER_ORG/ai-security @OWNER_ORG/policy-engineers
+/examples/executive-poc/policies/    @OWNER_ORG/ai-security @OWNER_ORG/policy-engineers
+
+# Model Runner & Execution Class Safety (UID 701)
+/crates/enclave-model-runnerd/       @OWNER_ORG/ai-security @OWNER_ORG/ml-platform
+
+# Swarm CAS, FastCDC & TUF 4-Role Verification (UID 702)
+/crates/enclave-swarm-syncd/         @OWNER_ORG/crypto-reviewers @OWNER_ORG/systems-sre
+
+# Supervisor, macOS Launchd Services & Seatbelt Sandboxing
+/crates/mcp-enclave/                 @OWNER_ORG/macos-platform @OWNER_ORG/security-architects
+/launchd/                            @OWNER_ORG/macos-platform @OWNER_ORG/security-architects
+
+# Security Schemas, Network Gateway & Identity Attestation
+/schemas/                            @OWNER_ORG/security-architects
+/examples/executive-poc/gateway/     @OWNER_ORG/security-architects
+/examples/executive-poc/identity/    @OWNER_ORG/crypto-reviewers
+/scripts/                            @OWNER_ORG/security-architects
+
+# Security Policy, Threat Model & CI/CD Governance
+/.github/                            @OWNER_ORG/security-architects
+/SECURITY.md                         @OWNER_ORG/security-architects
+/docs/THREAT_MODEL_STRIDE.md         @OWNER_ORG/security-architects
+/docs/ARCHITECTURE_DECISION_RECORDS.md @OWNER_ORG/security-architects
+/Cargo.toml                          @OWNER_ORG/security-architects
+/Cargo.lock                          @OWNER_ORG/security-architects
+/deny.toml                           @OWNER_ORG/security-architects
+/.cargo/                             @OWNER_ORG/security-architects

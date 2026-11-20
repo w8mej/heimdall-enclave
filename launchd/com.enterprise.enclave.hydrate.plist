@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.enterprise.enclave.hydrate</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/opt/enterprise/enclave/bin/mcp-enclave</string>
+		<string>deploy</string>
+		<string>hydrate-worker</string>
+	</array>
+	<key>UserName</key>
+	<string>_enclavecas</string>
+	<key>GroupName</key>
+	<string>_enclavecas</string>
+	<key>WatchPaths</key>
+	<array>
+		<string>/var/run/enclave/jobs</string>
+	</array>
+	<key>ThrottleInterval</key>
+	<integer>2</integer>
+	<key>StandardOutPath</key>
+	<string>/var/log/enclave/hydrate.log</string>
+	<key>StandardErrorPath</key>
+	<string>/var/log/enclave/hydrate.log</string>
+</dict>
+</plist>

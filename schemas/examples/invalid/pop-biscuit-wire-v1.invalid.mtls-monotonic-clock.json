@@ -1,0 +1,15 @@
+{
+  "v": 1,
+  "sealed_biscuit": "En0KEwoEMTIzNBgDIgkKBwgKEgMYgAgSJAgAEiBRb3R",
+  "seq_u64": 43,
+  "args_blake3": "9999999999999999999999999999999999999999999999999999999999999999",
+  "pop_sig_ed25519": "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+  "hop": 3,
+  "transport": "mtls_exporter",
+  "clock": {
+    "mach_continuous_time_ns_expiry": 1,
+    "max_ttl_ms": 30000,
+    "skew_ms": 2000,
+    "utc_epoch_ms_expiry": 1
+  }
+}

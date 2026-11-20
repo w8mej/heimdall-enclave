@@ -1,0 +1,118 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/enclave-core",
+    "crates/enclave-native-wait-owner",
+    "crates/enclave-crypto",
+    "crates/enclave-custody-vaultd",
+    "crates/enclave-agent-runtime",
+    "crates/enclave-swarm-syncd",
+    "crates/enclave-zk-auditor",
+    "crates/enclave-model-runnerd",
+    "crates/enclave-tool-host",
+    "crates/enclave-client-gateway",
+    "crates/mcp-enclave",
+    "services/ledger-gateway",
+    "vendor/p3-util",
+]
+
+[workspace.package]
+version = "0.1.0-alpha.1"
+edition = "2021"
+rust-version = "1.89"
+license = "Apache-2.0"
+repository = "https://github.com/Heimdall-Enclave/Heimdall-Enclave"
+publish = false
+
+[workspace.dependencies]
+# Async runtime (current-thread only inside the daemons to respect RSS ceilings)
+tokio = { version = "1.54", default-features = false, features = ["rt", "net", "io-util", "time", "macros", "sync", "signal"] }
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+ciborium = "0.2"
+serde_bytes = "0.11"
+hex = "0.4"
+base64 = "0.22"
+uuid = { version = "1", features = ["v4", "serde"] }
+# Hashing / crypto
+blake3 = "1.8"
+sha2 = "0.10"
+hmac = "0.12"
+hkdf = "0.12"
+ed25519-dalek = { version = "2.2", features = ["rand_core", "zeroize"] }
+x25519-dalek = { version = "2.0", features = ["static_secrets", "zeroize"] }
+p256 = { version = "0.13", features = ["ecdsa", "ecdh", "pkcs8"] }
+aes = "0.8"
+cbc = { version = "0.1", features = ["alloc"] }
+chacha20poly1305 = "0.10"
+hpke = { version = "0.13", default-features = false, features = ["alloc", "x25519"] }
+fips203 = { version = "0.4.3", default-features = false, features = ["ml-kem-768", "default-rng"] }
+fips204 = { version = "0.4.6", default-features = false, features = ["ml-dsa-65", "default-rng"] }
+rand_core = { version = "0.6", features = ["getrandom"] }
+rand = "0.8"
+zeroize = { version = "1.8", features = ["derive"] }
+subtle = "2.6"
+# Policy engines
+cedar-policy = "4.14"
+biscuit-auth = "6.0"
+# Plonky3 (KoalaBear / Poseidon2 / FRI / uni-STARK)
+p3-field = "0.8"
+p3-koala-bear = "0.8"
+p3-poseidon2 = "0.8"
+p3-symmetric = "0.8"
+p3-challenger = "0.8"
+p3-commit = "0.8"
+p3-dft = "0.8"
+p3-fri = "0.8"
+p3-merkle-tree = "0.8"
+p3-matrix = "0.8"
+p3-air = "0.8"
+p3-uni-stark = "0.8"
+# Misc
+anyhow = "1.0"
+thiserror = "2.0"
+libc = "0.2"
+clap = { version = "4.5", features = ["derive"] }
+unicode-normalization = "0.1"
+regex-lite = "0.1"
+allocative = "0.3"
+proptest = "1.6"
+# TLS / SVID
+rustls = { version = "0.23", default-features = false, features = ["std", "ring"] }
+tokio-rustls = { version = "0.26", default-features = false, features = ["ring"] }
+rcgen = { version = "0.12", default-features = false, features = ["pem", "ring"] }
+x509-parser = "0.16"
+rustls-pki-types = "1.15"
+starlark = "0.14"
+wasmtime = { version = "36.0.20", default-features = false, features = ["runtime", "std"] }
+cc = "1.2"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 4
+panic = "abort"
+debug = false
+strip = "symbols"
+overflow-checks = true
+
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 2
+
+[workspace.lints.rust]
+unsafe_op_in_unsafe_fn = "deny"
+missing_debug_implementations = "warn"
+
+[workspace.lints.clippy]
+dbg_macro = "deny"
+todo = "deny"
+unimplemented = "deny"
+
+# p3-util 0.8.0 uses a slice MaybeUninit API unavailable on the declared MSRV.
+# Keep the locked Plonky3 versions and backport only that conversion.
+[patch.crates-io]
+p3-util = { path = "vendor/p3-util" }

@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://mcpmac.invalid/schemas/enclave-host-config.schema.json",
+  "title": "enclave-host-config.json",
+  "description": "Signed host configuration distributed via TUF (FS-701 §4.1.3, FS-702 §3.2, FS-703 §3.1, FS-705 §7.3, ADR-007 §3, GAP-20).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "profile_floor",
+    "ifc_grant_public_key",
+    "calibration_corpus_digest",
+    "vk_digest",
+    "mcp_lock_digest",
+    "fido_mds_allowlist_digest"
+  ],
+  "properties": {
+    "profile_floor": {
+      "type": "string",
+      "enum": ["L1", "L2", "L3"],
+      "description": "Workstation profile floor; daemons refuse configurations below this floor."
+    },
+    "ifc_grant_public_key": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "UID 704's Ed25519 grant public key (hex)."
+    },
+    "ohttp_key_config": {
+      "type": "string",
+      "description": "Optional OHTTP gateway key configuration for encapsulated compliance rollups."
+    },
+    "calibration_corpus_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "BLAKE3 digest of the pinned RLCD calibration corpus."
+    },
+    "vk_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "BLAKE3 digest of the STARK verifying key (vk)."
+    },
+    "mcp_lock_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "BLAKE3 digest of the signed MCP tool lock."
+    },
+    "fido_mds_allowlist_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "BLAKE3 digest of the FIDO MDS allowlist metadata."
+    },
+    "codesign_pins": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{40,64}$"
+      },
+      "description": "Optional mapping of binary names to expected cdhash values in LocalPins mode."
+    }
+  }
+}

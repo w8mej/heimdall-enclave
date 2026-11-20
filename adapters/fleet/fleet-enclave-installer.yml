@@ -1,0 +1,25 @@
+---
+# L2 example. For L3 use fleet-enclave-installer-l3.yml and an L3-built package.
+# Fleet GitOps software specification for MCPMac Enterprise Enclave (FS-706)
+apiVersion: v1
+kind: software
+spec:
+  packages:
+    - url: https://dist.enterprise.internal/enclave/MCPMac-Enclave-3.0.0.pkg
+      self_service: false
+      install_script: |
+        #!/bin/sh
+        set -eu
+        # Fleet must verify the configured package digest/signature before this script.
+        /usr/sbin/pkgutil --check-signature MCPMac-Enclave-3.0.0.pkg
+        /usr/sbin/installer -pkg MCPMac-Enclave-3.0.0.pkg -target /
+        /opt/enterprise/enclave/bin/mcp-enclave deploy preflight --profile L2
+        /opt/enterprise/enclave/bin/mcp-enclave deploy install --profile L2
+        /opt/enterprise/enclave/bin/mcp-enclave deploy verify --profile L2
+      post_install_query: |
+        SELECT 1 FROM launchd WHERE label = 'com.enterprise.enclave.supervisor'
+        AND run_at_load = '1';
+      uninstall_script: |
+        #!/bin/sh
+        set -eu
+        /opt/enterprise/enclave/bin/mcp-enclave deploy purge --profile L2 --yes

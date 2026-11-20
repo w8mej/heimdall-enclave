@@ -1,0 +1,54 @@
+[package]
+name = "enclave-agent-runtime"
+description = "UID 704 _enclaveifc: UserTurnV1 compiler, CaMeL/FIDES IFC capability heap, native Cedar + Biscuit v3 conjunctive PDP, QIF ledger, tool pinning (FS-704)"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[features]
+default = ["l2-a2a"]
+# DEFECT-F-64: development-only loading of unsigned inline policy bundles
+# (with `--dev-same-uid`). Never enabled for release builds (GAP-03).
+simulation = []
+l2-a2a = ["dep:rustls", "dep:tokio-rustls", "dep:x509-parser", "dep:rustls-pki-types", "dep:tokio"]
+
+[dependencies]
+enclave-core = { path = "../enclave-core" }
+enclave-crypto = { path = "../enclave-crypto" }
+enclave-tool-host = { path = "../enclave-tool-host" }
+allocative.workspace = true
+starlark.workspace = true
+# DEFECT-F-69: AST node types for the frozen-dialect walker (same version as starlark's own).
+starlark_syntax = "0.14"
+anyhow.workspace = true
+cedar-policy.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+ciborium.workspace = true
+serde_bytes.workspace = true
+hex.workspace = true
+blake3.workspace = true
+sha2.workspace = true
+ed25519-dalek.workspace = true
+rand_core.workspace = true
+libc.workspace = true
+rustls = { workspace = true, optional = true }
+tokio-rustls = { workspace = true, optional = true }
+x509-parser = { workspace = true, optional = true }
+rustls-pki-types = { workspace = true, optional = true }
+tokio = { workspace = true, optional = true }
+
+[dev-dependencies]
+# Wire compatibility test serializes the actual custody response; no simulation feature.
+enclave-custody-vaultd = { path = "../enclave-custody-vaultd" }
+enclave-swarm-syncd = { path = "../enclave-swarm-syncd" }
+rcgen.workspace = true
+time = "0.3"
+proptest.workspace = true
+tempfile = "3"
+wasmtime = { workspace = true, features = ["cranelift", "wat"] }
+
+[lints]
+workspace = true

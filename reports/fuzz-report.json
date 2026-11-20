@@ -1,0 +1,72 @@
+{
+  "timestamp": "Unix Epoch 1795164568 (UTC)",
+  "status": "PASSED",
+  "engine": "proptest",
+  "total_iterations": 64001,
+  "duration_ms": 0,
+  "targets": [
+    {
+      "name": "flowgate_fsm_bisimulation",
+      "lean_spec": "RustModelBridge.lean:Theorem 11",
+      "iterations": 2313,
+      "failures": 0,
+      "status": "VERIFIED"
+    },
+    {
+      "name": "security_lattice_laws",
+      "lean_spec": "Lattice.lean",
+      "iterations": 2000,
+      "failures": 0,
+      "status": "VERIFIED"
+    },
+    {
+      "name": "qif_entropy_bounds",
+      "lean_spec": "QifBound.lean:Theorem 2",
+      "iterations": 2000,
+      "failures": 0,
+      "status": "VERIFIED"
+    },
+    {
+      "name": "context_dag_provenance",
+      "lean_spec": "ContextDagProvenance.lean:Theorem 23",
+      "iterations": 2000,
+      "failures": 0,
+      "status": "VERIFIED"
+    },
+    {
+      "name": "jcs_canonical_invariants",
+      "lean_spec": "RFC 8785",
+      "iterations": 2000,
+      "failures": 0,
+      "status": "VERIFIED"
+    },
+    {
+      "name": "rolling_qif_ledger_conservation",
+      "lean_spec": "RollingQif.lean",
+      "iterations": 17417,
+      "failures": 0,
+      "status": "VERIFIED"
+    },
+    {
+      "name": "delegation_slice_conservation",
+      "lean_spec": "DelegationAccounting.lean:Theorem 35",
+      "iterations": 17292,
+      "failures": 0,
+      "status": "VERIFIED"
+    },
+    {
+      "name": "capability_heap_invariants",
+      "lean_spec": "CapabilityProtocol.lean",
+      "iterations": 16979,
+      "failures": 0,
+      "status": "VERIFIED"
+    },
+    {
+      "name": "adversarial_wire_parsers",
+      "lean_spec": "Non-Assurance Boundary Hardening",
+      "iterations": 2000,
+      "failures": 0,
+      "status": "VERIFIED"
+    }
+  ]
+}

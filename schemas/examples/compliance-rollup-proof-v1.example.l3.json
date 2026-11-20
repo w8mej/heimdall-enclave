@@ -1,0 +1,25 @@
+{
+  "v": 1,
+  "encoding": "cbor",
+  "profile": 3,
+  "public_inputs": {
+    "vk_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "policy_blake3": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "tuf_snapshot_root": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "qif_cap_mb": 12000,
+    "R_fleet_pk": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "J_prev": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "J_curr": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "nullifier_e": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "field": "KoalaBear^5",
+  "fri": {
+    "blowup": 4,
+    "queries": 84,
+    "pow_bits": 16
+  },
+  "proof_bytes_len": 91234,
+  "padded_frame_bytes": 327680,
+  "cohort_size": 48,
+  "heartbeat": false
+}

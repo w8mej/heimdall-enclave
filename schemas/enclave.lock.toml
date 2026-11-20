@@ -1,0 +1,77 @@
+# Example enclave.lock.toml (FS-701 §3.3, FS-702 §3.2, FS-704 §4.2) — validated by
+# schemas/enclave-lock.schema.json (verify-enclave V18) and the RSS arithmetic check (V21).
+# All digests below are placeholders for illustration.
+
+[lock]
+version = 1
+generated = "2026-11-04"
+
+[budget]
+uid_702_705_mib = 152    # 48 + 24 + 32 + 48
+steady_state_mib = 200   # + UID 701 adapter host (48)
+active_prompt_mib = 232  # + on-demand _enclaveintent UI helper (<= 32, idle-exited)
+
+[[daemons]]
+uid = 701
+name = "_llmagent"
+memory_limit_mib = 48
+plist = "com.enterprise.enclave.adapter.plist"
+allow_jit = false
+
+[[daemons]]
+uid = 702
+name = "_enclavecas"
+memory_limit_mib = 48
+plist = "com.enterprise.enclave.cas.plist"
+allow_jit = false
+
+[[daemons]]
+uid = 703
+name = "_piivault"
+memory_limit_mib = 24
+plist = "com.enterprise.enclave.custody.plist"
+allow_jit = false
+bundle = "/Library/Application Support/EnterpriseEnclave/EnclaveCustody.app"
+
+[[daemons]]
+uid = 704
+name = "_enclaveifc"
+memory_limit_mib = 32
+plist = "com.enterprise.enclave.ifc.plist"
+allow_jit = false
+
+[[daemons]]
+uid = 705
+name = "_enclavezk"
+memory_limit_mib = 48
+plist = "com.enterprise.enclave.zk.plist"
+allow_jit = false
+
+[tuf]
+roles = ["root", "timestamp", "snapshot", "targets"]
+hashes = ["blake3", "sha256"]
+fastcdc_gear_table_sha256 = "8b257b2c3c0b61aee68d89e9f83ec618fd2326fe26e898c4b05a69e945a4ab5f"
+
+[[artifacts]]
+name = "llada-8b-instruct"
+cas_uri = "cas://blake3-bao-v1/1111111111111111111111111111111111111111111111111111111111111111?target=llada-8b-instruct&ns=models&min_profile=L1"
+blake3 = "1111111111111111111111111111111111111111111111111111111111111111"
+sha256 = "2222222222222222222222222222222222222222222222222222222222222222"
+classification = "public_l1"
+lazy_fuse_t = true
+license_policy = { spdx_id = "MIT", allow_p2p_seeding = true }
+
+[[artifacts]]
+name = "policy-bundle-prod"
+cas_uri = "cas://blake3-bao-v1/3333333333333333333333333333333333333333333333333333333333333333?target=policy-bundle-prod&ns=policies&min_profile=L2"
+blake3 = "3333333333333333333333333333333333333333333333333333333333333333"
+sha256 = "4444444444444444444444444444444444444444444444444444444444444444"
+classification = "internal_l2"
+jurisdiction_shard = "EU"
+lazy_fuse_t = false
+license_policy = { spdx_id = "LicenseRef-proprietary", allow_p2p_seeding = false }
+
+[[mcp_tools]]
+server = "corp-customer-db"
+tools_list_blake3 = "5555555555555555555555555555555555555555555555555555555555555555"
+default_slot_kind = "AST_STRUCTURAL"

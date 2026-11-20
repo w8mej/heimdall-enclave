@@ -1,0 +1,13 @@
+L3_ATTESTATION_RISK — read before configuring L3
+L3 permits verified Basic Attestation plus separate authenticated asset enrollment.
+Basic Attestation verifies an approved authenticator model; it does not provide
+a manufacturer-attested binding to your organization's individual asset serial.
+Enterprise Attestation supplies that stronger device-identity evidence when
+supported and provisioned, helping detect wrong-device enrollment or substitution.
+With Basic Attestation, you rely more heavily on the enrollment authority and
+its verified binding of the credential to the asset. A manually entered serial,
+USB identifier or AAGUID alone is insufficient. Use Enterprise Attestation when
+your organization's policy requires it; do not silently fall back to Basic.
+Verify the authenticated asset binding before treating this L3 deployment as
+qualified. Successful setup alone does not certify those enrollment checks.
+Touch ID, signed authenticator UV, custody, revocation and other L3 gates remain required.

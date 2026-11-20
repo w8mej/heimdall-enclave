@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.enterprise.enclave.custody</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/usr/bin/sandbox-exec</string>
+		<string>-f</string>
+		<string>/opt/enterprise/enclave/sandbox/custody.sb</string>
+		<string>/Library/Application Support/EnterpriseEnclave/EnclaveCustody.app/Contents/MacOS/enclave-custody-vaultd</string>
+		<string>--socket-dir</string>
+		<string>/var/run/enclave</string>
+		<string>--audit-dir</string>
+		<string>/var/log/enclave</string>
+		<string>--state-dir</string>
+		<string>/var/db/enclave/custody</string>
+		<string>--profile</string>
+		<string>L2</string>
+		<string>--sandbox-profile</string>
+		<string>/opt/enterprise/enclave/sandbox/custody.sb</string>
+		<string>--yubikey-transport</string>
+		<string>hid</string>
+		<string>--mds-file</string>
+		<string>/Library/Application Support/EnterpriseEnclave/fido-mds.json</string>
+		<string>--oidc-broker-config</string>
+		<string>/Library/Application Support/EnterpriseEnclave/oidc-broker-identity.json</string>
+	</array>
+	<key>UserName</key>
+	<string>_piivault</string>
+	<key>GroupName</key>
+	<string>_piivault</string>
+	<key>InitGroups</key>
+	<true/>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<dict>
+		<key>SuccessfulExit</key>
+		<false/>
+	</dict>
+	<key>ThrottleInterval</key>
+	<integer>30</integer>
+	<key>ProcessType</key>
+	<string>Adaptive</string>
+	<key>LowPriorityIO</key>
+	<true/>
+	<key>Umask</key>
+	<integer>63</integer>
+	<key>SoftResourceLimits</key>
+	<dict>
+		<key>Core</key>
+		<integer>0</integer>
+		<key>ResidentSetSize</key>
+		<integer>25165824</integer>
+		<key>NumberOfFiles</key>
+		<integer>256</integer>
+		<key>NumberOfProcesses</key>
+		<integer>1</integer>
+	</dict>
+	<key>HardResourceLimits</key>
+	<dict>
+		<key>Core</key>
+		<integer>0</integer>
+		<key>ResidentSetSize</key>
+		<integer>25165824</integer>
+		<key>NumberOfFiles</key>
+		<integer>256</integer>
+		<key>NumberOfProcesses</key>
+		<integer>1</integer>
+	</dict>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>MallocNanoZone</key>
+		<string>0</string>
+	</dict>
+	<key>StandardOutPath</key>
+	<string>/var/log/enclave/custody/custody.log</string>
+	<key>StandardErrorPath</key>
+	<string>/var/log/enclave/custody/custody.log</string>
+</dict>
+</plist>

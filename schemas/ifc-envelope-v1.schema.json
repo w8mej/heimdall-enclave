@@ -1,0 +1,204 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://mcpmac.invalid/schemas/ifc-envelope-v1.schema.json",
+  "title": "IfcEnvelopeV1",
+  "description": "FS-704 \u00a73.2 opaque SSA capability handle label. Fan-in above 64 entity keys MUST fail closed (E2BIG) rather than truncate (F-022).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["v", "handle", "label", "entity_keys", "origin"],
+  "properties": {
+    "v": {
+      "const": 1
+    },
+    "handle": {
+      "type": "string",
+      "pattern": "^\\$(v|paste)_[0-9]+$"
+    },
+    "label": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["c", "t"],
+      "properties": {
+        "c": {
+          "enum": ["C1", "C2", "C3", "C4"]
+        },
+        "t": {
+          "enum": ["T0", "T1", "T2", "T3"]
+        }
+      }
+    },
+    "entity_keys": {
+      "type": "array",
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^ek_[0-9a-f]{32}$"
+      }
+    },
+    "qif_pool": {
+      "enum": ["entity_key", "global_unstructured_c3_c4_24h_pool"]
+    },
+    "slot_kind": {
+      "enum": ["AST_STRUCTURAL", "BOUND_LITERAL"],
+      "default": "AST_STRUCTURAL"
+    },
+    "origin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": {
+          "enum": [
+            "user_directive",
+            "user_attachment",
+            "mcp_tool_output",
+            "signed_policy",
+            "enclave_verified"
+          ]
+        },
+        "mcp_tools_list_blake3": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "tool_name": {
+          "type": "string"
+        }
+      }
+    },
+    "schema_version": {
+      "const": "enclave.ifc.envelope.v1"
+    },
+    "boot_epoch_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    },
+    "payload_blake3": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "value_type": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "provenance_parents": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^\\$(v|paste)_[0-9]+$"
+      },
+      "maxItems": 64
+    },
+    "provenance_dag_blake3": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "allowed_declassifiers": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 128
+      },
+      "maxItems": 32
+    },
+    "enclave_boot_mac": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "vault_tier": {
+      "enum": ["none", "A3", "A4"],
+      "description": "Which HPKE tier seals the underlying surrogate (ADR-009)"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "origin": {
+            "properties": {
+              "kind": {
+                "const": "mcp_tool_output"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "label": {
+            "properties": {
+              "t": {
+                "const": "T3"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "origin": {
+            "properties": {
+              "kind": {
+                "const": "user_attachment"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "label": {
+            "properties": {
+              "t": {
+                "const": "T3"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "label": {
+            "properties": {
+              "c": {
+                "enum": ["C3", "C4"]
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "entity_keys": {
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "label": {
+            "properties": {
+              "c": {
+                "const": "C4"
+              }
+            }
+          }
+        },
+        "required": ["vault_tier"]
+      },
+      "then": {
+        "properties": {
+          "vault_tier": {
+            "enum": ["A4", "none"]
+          }
+        }
+      }
+    }
+  ]
+}

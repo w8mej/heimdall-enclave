@@ -1,0 +1,31 @@
+[package]
+name = "enclave-client-gateway"
+description = "Authenticated console ingress and scoped runtime-owned plan execution (GAP-18)"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+enclave-core = { path = "../enclave-core" }
+enclave-agent-runtime = { path = "../enclave-agent-runtime" }
+serde.workspace = true
+serde_json.workspace = true
+serde_bytes.workspace = true
+libc.workspace = true
+tokio.workspace = true
+zeroize.workspace = true
+
+[lints]
+workspace = true
+
+[dev-dependencies]
+ed25519-dalek.workspace = true
+rand_core.workspace = true
+blake3.workspace = true
+tempfile = "3"
+wasmtime = { workspace = true, features = ["cranelift", "wat"] }
+enclave-tool-host = { path = "../enclave-tool-host" }
+enclave-crypto = { path = "../enclave-crypto" }
+hex.workspace = true

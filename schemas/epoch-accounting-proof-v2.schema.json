@@ -1,0 +1,205 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://mcpmac.invalid/schemas/epoch-accounting-proof-v2.schema.json",
+  "title": "HidingEpochAccountingProofV2 (JSON view of the CBOR frame)",
+  "description": "Version 2 hiding accounting proof, not the full compliance relation. Distinct transcript and verifier key; no private RNG seed on the wire. L3 remains padded to 327680 bytes. Public sequence, roots and totals remain visible. The outer frame is CBOR; its opaque proof byte string uses exactly Postcard 1.1.3 with trailing bytes rejected, bound to the v2 verifier-key digest.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "v",
+    "encoding",
+    "profile",
+    "public_inputs",
+    "proof_bytes_len",
+    "padded_frame_bytes",
+    "field",
+    "fri",
+    "s_start",
+    "s_end",
+    "proof",
+    "padding"
+  ],
+  "properties": {
+    "v": {
+      "const": 2
+    },
+    "encoding": {
+      "const": "cbor"
+    },
+    "profile": {
+      "enum": [2, 3]
+    },
+    "public_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "vk_digest",
+        "policy_blake3",
+        "tuf_snapshot_root",
+        "qif_cap_mb",
+        "R_fleet_pk",
+        "J_prev",
+        "J_curr",
+        "nullifier_e",
+        "used_in",
+        "used_out",
+        "redaction_checked"
+      ],
+      "properties": {
+        "vk_digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "policy_blake3": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "tuf_snapshot_root": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "qif_cap_mb": {
+          "const": 12000
+        },
+        "R_fleet_pk": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "J_prev": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "J_curr": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "nullifier_e": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "redaction_checked": {
+          "const": "native",
+          "description": "Native prechecks only; no in-circuit redaction claim."
+        },
+        "used_in": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 12000
+        },
+        "used_out": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 12000
+        }
+      }
+    },
+    "field": {
+      "const": "KoalaBear^5"
+    },
+    "fri": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "blowup": {
+          "const": 4
+        },
+        "queries": {
+          "const": 84,
+          "description": "Configured FRI parameters:84 queries,16-bit query proof-of-work,rho=1/4. No overall security-level proof is implied."
+        },
+        "pow_bits": {
+          "const": 16
+        }
+      },
+      "required": ["blowup", "queries", "pow_bits"]
+    },
+    "proof_bytes_len": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 327680
+    },
+    "padded_frame_bytes": {
+      "type": "integer"
+    },
+    "cohort_size": {
+      "type": "integer",
+      "minimum": 32
+    },
+    "heartbeat": {
+      "type": "boolean"
+    },
+    "hardware_batch_anchor_sigs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9a-f]+$"
+      }
+    },
+    "s_start": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 18446744073709551615
+    },
+    "s_end": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 18446744073709551615,
+      "description": "Inclusive span must contain 1 to 4096 slots; enforced by verifier."
+    },
+    "proof": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 255
+      },
+      "maxItems": 327680,
+      "description": "JSON view of CBOR byte string.",
+      "minItems": 1
+    },
+    "padding": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 255
+      },
+      "maxItems": 327680,
+      "description": "JSON view of CBOR byte string."
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": 3
+          }
+        }
+      },
+      "then": {
+        "required": ["cohort_size", "heartbeat"],
+        "properties": {
+          "padded_frame_bytes": {
+            "const": 327680
+          }
+        },
+        "not": {
+          "required": ["hardware_batch_anchor_sigs"]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": 2
+          }
+        }
+      },
+      "then": {
+        "required": ["hardware_batch_anchor_sigs"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "v": 1,
+  "daemon_uid": 704,
+  "boot_epoch_id": "6fe7229d-f77c-47ec-b370-69c20118296e",
+  "log_seq_u64": 1042,
+  "rpc_seq_u64": 8810,
+  "ts_utc_ms": "2026-11-05T03:00:00Z",
+  "spiffe_id": "spiffe://corporate.internal/enclave/uid/704",
+  "prev_blake3": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "prev_poseidon2": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "payload": {
+    "event": "TOOL_CALL",
+    "decision": "ALLOW"
+  }
+}
