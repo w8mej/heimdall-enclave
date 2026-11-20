@@ -1,0 +1,11 @@
+---
+- name: Initiate Asynchronous Model Weight Hydration
+  ansible.builtin.command:
+    cmd: >
+      {{ enclave_bin_path }} deploy hydrate
+      --profile {{ enclave_profile }}
+      --target {{ enclave_target_model }}
+      {% if enclave_async_hydration %}--async{% else %}--sync{% endif %}
+  register: hydrate_out
+  changed_when: hydrate_out.rc == 40 or hydrate_out.rc == 0
+  failed_when: hydrate_out.rc not in [0, 40]

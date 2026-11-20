@@ -1,0 +1,27 @@
+[package]
+name = "ledger-gateway"
+description = "OHTTP gateway and compliance ledger verification service (GAP-26)"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+enclave-core = { path = "../../crates/enclave-core" }
+enclave-crypto = { path = "../../crates/enclave-crypto" }
+enclave-zk-auditor = { path = "../../crates/enclave-zk-auditor" }
+serde.workspace = true
+serde_json.workspace = true
+serde_bytes.workspace = true
+ciborium.workspace = true
+hex.workspace = true
+blake3.workspace = true
+libc.workspace = true
+
+[dev-dependencies]
+ed25519-dalek.workspace = true
+rand_core.workspace = true
+
+[lints]
+workspace = true

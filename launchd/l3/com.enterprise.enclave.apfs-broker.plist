@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+<key>Label</key><string>com.enterprise.enclave.apfs-broker</string>
+<key>ProgramArguments</key><array><string>/opt/enterprise/enclave/bin/enclave-apfs-broker</string></array>
+<key>UserName</key><string>root</string>
+<key>GroupName</key><string>wheel</string>
+<key>RunAtLoad</key><true/><key>KeepAlive</key><true/>
+<key>ThrottleInterval</key><integer>10</integer>
+<key>WorkingDirectory</key><string>/</string>
+<key>Umask</key><integer>63</integer>
+<key>SoftResourceLimits</key><dict><key>Core</key><integer>0</integer><key>NumberOfFiles</key><integer>64</integer></dict>
+<key>HardResourceLimits</key><dict><key>Core</key><integer>0</integer><key>NumberOfFiles</key><integer>128</integer></dict>
+<key>StandardOutPath</key><string>/var/log/enclave/apfs-broker/broker.log</string>
+<key>StandardErrorPath</key><string>/var/log/enclave/apfs-broker/broker.log</string>
+</dict></plist>

@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://depot.invalid/schemas/hydration-status.schema.json",
+  "title": "hydration-status.json",
+  "description": "Status descriptor emitted by detached model weight hydration worker (FS-706 §3.3, D-R8).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "job_id",
+    "target",
+    "profile",
+    "status",
+    "bytes_synced",
+    "bytes_total",
+    "percent",
+    "elapsed_ms"
+  ],
+  "properties": {
+    "job_id": {
+      "type": "string",
+      "description": "Unique identifier of the corresponding hydration job."
+    },
+    "target": {
+      "type": "string",
+      "description": "Model target artifact slug."
+    },
+    "profile": {
+      "type": "string",
+      "enum": ["L1", "L2", "L3"],
+      "description": "Deployment profile tier."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "syncing", "verifying", "completed", "failed"],
+      "description": "Current lifecycle status of the hydration process."
+    },
+    "bytes_synced": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of bytes downloaded and verified so far."
+    },
+    "bytes_total": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total size in bytes of the target model artifact."
+    },
+    "percent": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 100.0,
+      "description": "Progress percentage (0.0 to 100.0)."
+    },
+    "bao_root": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "Verified BLAKE3 Bao Merkle tree root hash."
+    },
+    "error": {
+      "type": "string",
+      "description": "Error diagnostic message if status is failed."
+    },
+    "elapsed_ms": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total elapsed time in milliseconds."
+    }
+  }
+}

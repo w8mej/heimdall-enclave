@@ -1,0 +1,215 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://depot.invalid/schemas/enclave-lock.schema.json",
+  "title": "enclave.lock.toml (parsed)",
+  "description": "Pins daemon ceilings, TUF roles, artifacts and depot tool-schema digests (FS-701 \u00a73.3, FS-702 \u00a73.2, FS-704 \u00a74.2).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["lock", "budget", "daemons", "tuf", "artifacts", "depot_tools"],
+  "properties": {
+    "lock": {
+      "type": "object",
+      "required": ["version", "generated"],
+      "properties": {
+        "version": {
+          "const": 1
+        },
+        "generated": {
+          "type": "string"
+        }
+      }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["uid_702_705_mib", "steady_state_mib", "active_prompt_mib"],
+      "properties": {
+        "uid_702_705_mib": {
+          "const": 152
+        },
+        "steady_state_mib": {
+          "const": 200
+        },
+        "active_prompt_mib": {
+          "const": 232
+        }
+      }
+    },
+    "daemons": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["uid", "name", "memory_limit_mib", "plist", "allow_jit"],
+        "properties": {
+          "uid": {
+            "enum": [701, 702, 703, 704, 705]
+          },
+          "name": {
+            "type": "string"
+          },
+          "memory_limit_mib": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 48
+          },
+          "plist": {
+            "type": "string",
+            "pattern": "^com\\.enterprise\\.enclave\\.[a-z]+\\.plist$"
+          },
+          "allow_jit": {
+            "const": false
+          },
+          "bundle": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "tuf": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["roles", "hashes"],
+      "properties": {
+        "roles": {
+          "type": "array",
+          "items": {
+            "enum": ["root", "timestamp", "snapshot", "targets"]
+          },
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true
+        },
+        "hashes": {
+          "type": "array",
+          "items": {
+            "enum": ["blake3", "sha256"]
+          },
+          "minItems": 2,
+          "uniqueItems": true
+        },
+        "fastcdc_gear_table_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "cas_uri",
+          "blake3",
+          "sha256",
+          "classification",
+          "license_policy"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "cas_uri": {
+            "type": "string",
+            "pattern": "^cas://blake3-bao-v1/[0-9a-f]{64}(\\?.*)?$"
+          },
+          "blake3": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "transport_ciphertext_bao_root": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "classification": {
+            "enum": ["public_l1", "internal_l2", "restricted_l3"]
+          },
+          "jurisdiction_shard": {
+            "enum": ["EU", "US", "APAC"]
+          },
+          "lazy_fuse_t": {
+            "type": "boolean"
+          },
+          "license_policy": {
+            "$ref": "#/definitions/license_policy"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "lazy_fuse_t": {
+                  "const": true
+                }
+              },
+              "required": ["lazy_fuse_t"]
+            },
+            "then": {
+              "properties": {
+                "classification": {
+                  "const": "public_l1"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "depot_tools": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["server", "tools_list_blake3"],
+        "properties": {
+          "server": {
+            "type": "string"
+          },
+          "tools_list_blake3": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "default_slot_kind": {
+            "const": "AST_STRUCTURAL"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "license_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["spdx_id", "allow_p2p_seeding"],
+      "properties": {
+        "spdx_id": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "allow_p2p_seeding": {
+          "type": "boolean",
+          "default": false
+        },
+        "attribution_notice_blake3": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,48 @@
+[package]
+name = "enclave-zk-auditor"
+description = "UID 705 _enclavezk: SecureSlabAllocator, graduated HardwareIntegrityQuarantine, Plonky3 KoalaBear^5 R_epoch STARK, L3 cohort Merkle, OHTTP-padded rollups (FS-705)"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+enclave-core = { path = "../enclave-core" }
+enclave-crypto = { path = "../enclave-crypto" }
+serde.workspace = true
+serde_json.workspace = true
+serde_bytes.workspace = true
+ciborium.workspace = true
+# Compact proof payload inside the version-2 CBOR frame. Keep the precise
+# codec version pinned in addition to the transcript/verifier-key domain.
+postcard = { version = "=1.1.3", default-features = false, features = ["alloc"] }
+hex.workspace = true
+blake3.workspace = true
+sha2.workspace = true
+libc.workspace = true
+ed25519-dalek.workspace = true
+rand_core.workspace = true
+rand.workspace = true
+rand10 = { package = "rand", version = "0.10", default-features = false, features = ["std_rng"] }
+chacha20 = { version = "=0.10.2", default-features = false, features = ["rng", "zeroize"] }
+zeroize.workspace = true
+hpke.workspace = true
+p3-field.workspace = true
+p3-koala-bear.workspace = true
+p3-symmetric.workspace = true
+p3-challenger.workspace = true
+p3-commit.workspace = true
+p3-dft.workspace = true
+p3-fri.workspace = true
+p3-merkle-tree.workspace = true
+p3-matrix.workspace = true
+p3-air.workspace = true
+p3-uni-stark.workspace = true
+
+[features]
+default = []
+simulation = []
+
+[lints]
+workspace = true

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "matching_committed_source": "dd2ade71c5121111dd615d5db8a0ae2b8540286a",
+  "generation_note": "Actual pinned evaluation completed before this source commit; committed source hashes below equal evaluated bytes. No claim that uncommitted inputs are transferred to native jobs.",
+  "command": {
+    "cwd": "proofs/lean4",
+    "argv": ["lake", "env", "lean", "--run", "ContextVectors.lean"],
+    "exit_code": 0
+  },
+  "compiler": "Lean4.14.0 Linux aarch64; imported ContextDagProvenance compiled by full pinned kernel gate",
+  "rows": 3440,
+  "artifact_sha256": "d07c1edd9b9a441c8091e03a90380a28379b2b232685640cd3061f000362e46d",
+  "source_sha256": {
+    "proofs/lean4/ContextVectors.lean": "b5271e7718b3ece6eaa7a6447e0b1adfa336c7dbaefe0f994f7690c62c2cd70f",
+    "proofs/lean4/Enclave/ContextDagProvenance.lean": "be4b5d77844110c5e52b7abe7fb70eb14aa0dbbfda070e814b83d3176f3c8ec3",
+    "proofs/lean4/Enclave/Lattice.lean": "c10ae15eac7af6e107ab9f953a6d36b2479ee4c7efb6193de31fdf353abebcb4",
+    "proofs/lean4/lean-toolchain": "190c6c74963949503698e8e5c3e208b07d14b4863ac0ce82d9664b2087ee8cc7"
+  },
+  "limits": "Finite join/admission/update projection; Bool sanitizer outcome is trusted, not a theorem about sanitizer correctness, authorized endorsement or actual caller wiring."
+}

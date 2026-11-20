@@ -1,0 +1,111 @@
+{
+  "schema": 1,
+  "producer": "transformers LlamaForCausalLM float32 (independent reference)",
+  "transformers": "4.48.1",
+  "torch": "2.5.1",
+  "checkpoint": {
+    "repo": "HuggingFaceTB/SmolLM2-135M-Instruct",
+    "revision": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
+    "model_sha256": "5af571cbf074e6d21a03528d2330792e532ca608f24ac70a143f6b369968ab8c",
+    "tokenizer_sha256": "9ca9acddb6525a194ec8ac7a87f24fbba7232a9a15ffa1af0c1224fcd888e47c",
+    "config_sha256": "8eb740e8bbe4cff95ea7b4588d17a2432deb16e8075bc5828ff7ba9be94d982a"
+  },
+  "special_tokens": {
+    "<|im_start|>": 1,
+    "<|im_end|>": 2,
+    "<|endoftext|>": 0
+  },
+  "tokenizer": [
+    {
+      "text": "Hello world",
+      "ids": [19556, 905]
+    },
+    {
+      "text": "hello",
+      "ids": [28120]
+    },
+    {
+      "text": " Hello, world!",
+      "ids": [38699, 28, 905, 17]
+    },
+    {
+      "text": "The quick brown fox jumps over the lazy dog.",
+      "ids": [504, 2365, 6354, 16438, 27003, 690, 260, 23790, 2767, 30]
+    },
+    {
+      "text": "{\"priority\":\"urgent\"}",
+      "ids": [39428, 33176, 25535, 3552, 293, 23597]
+    },
+    {
+      "text": "naïve café — 東京 🚀",
+      "ids": [
+        3546, 46494, 37366, 1841, 17097, 247, 126, 16736, 122, 15107, 244, 218
+      ]
+    },
+    {
+      "text": "  leading spaces\n\nand\ttabs",
+      "ids": [216, 2899, 5600, 198, 198, 397, 197, 100, 7366]
+    },
+    {
+      "text": "1234567890 3.14159",
+      "ids": [
+        33, 34, 35, 36, 37, 38, 39, 40, 41, 32, 216, 35, 30, 33, 36, 33, 37, 41
+      ]
+    },
+    {
+      "text": "",
+      "ids": []
+    }
+  ],
+  "logits": [
+    {
+      "name": "hello_world",
+      "ids": [1, 19556, 905],
+      "last_top10_ids": [282, 28, 30, 506, 284, 198, 288, 29, 314, 42],
+      "last_top10_logits": [
+        26.1224, 25.89782, 25.87457, 24.86476, 24.66901, 24.41018, 24.14071,
+        24.10682, 23.98294, 23.8583
+      ],
+      "per_position_argmax": [28, 28, 282]
+    },
+    {
+      "name": "chat_capital",
+      "ids": [
+        1, 4093, 198, 1780, 314, 260, 3575, 282, 4649, 47, 2, 198, 1, 520, 9531,
+        198
+      ],
+      "last_top10_ids": [504, 38634, 33488, 54, 57, 2068, 1653, 1195, 788, 60],
+      "last_top10_logits": [
+        30.66167, 26.83856, 26.20604, 25.04578, 25.02756, 24.51427, 23.96583,
+        23.88093, 23.74644, 23.71863
+      ],
+      "per_position_argmax": [
+        28, 198, 1780, 314, 260, 768, 282, 4649, 47, 2, 198, 1, 520, 9531, 198,
+        504
+      ]
+    }
+  ],
+  "greedy": [
+    {
+      "name": "hello_world",
+      "ids": [1, 19556, 905],
+      "greedy_new_ids": [
+        282, 15879, 284, 1101, 29, 16775, 28, 837, 9019, 284, 1835, 12342, 1592,
+        281, 7039, 1853, 30, 198, 198, 2705, 282, 260, 768, 13329
+      ],
+      "greedy_text": " of fantasy and sci-fi, where magic and technology blend together in unexpected ways.\n\nOne of the most iconic"
+    },
+    {
+      "name": "chat_capital",
+      "ids": [
+        1, 4093, 198, 1780, 314, 260, 3575, 282, 4649, 47, 2, 198, 1, 520, 9531,
+        198
+      ],
+      "greedy_new_ids": [
+        504, 3575, 282, 4649, 314, 7042, 30, 7042, 314, 253, 2240, 3807, 281,
+        260, 5761, 599, 282, 260, 1798, 28, 284, 357, 314, 1343
+      ],
+      "greedy_text": "The capital of France is Paris. Paris is a city located in the northern part of the country, and it is known"
+    }
+  ]
+}

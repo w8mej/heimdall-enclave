@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://depot.invalid/schemas/hydration-job.schema.json",
+  "title": "hydration-job.json",
+  "description": "Job descriptor for detached model weight hydration worker (FS-706 §3.3, D-R8).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["job_id", "target", "profile", "created_at", "source"],
+  "properties": {
+    "job_id": {
+      "type": "string",
+      "description": "Unique identifier for this hydration task."
+    },
+    "target": {
+      "type": "string",
+      "description": "Model target artifact slug from enclave.lock.toml."
+    },
+    "profile": {
+      "type": "string",
+      "enum": ["L1", "L2", "L3"],
+      "description": "Deployment profile tier governing transport."
+    },
+    "created_at": {
+      "type": "integer",
+      "description": "Unix timestamp in seconds when the job was dispatched."
+    },
+    "source": {
+      "type": "string",
+      "enum": ["r2", "swarm", "dmg"],
+      "description": "Transport source used for hydration."
+    },
+    "dmg_path": {
+      "type": "string",
+      "description": "Optional filesystem path to pre-staged DMG image for Profile L3."
+    }
+  }
+}

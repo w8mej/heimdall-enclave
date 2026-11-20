@@ -1,0 +1,11 @@
+{
+  "job_id": "hyd-20261106-001",
+  "target": "llada-8b-instruct",
+  "profile": "L1",
+  "status": "completed",
+  "bytes_synced": 4294967296,
+  "bytes_total": 4294967296,
+  "percent": 100.0,
+  "bao_root": "1111111111111111111111111111111111111111111111111111111111111111",
+  "elapsed_ms": 1420
+}

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>name</key>
+    <string>com.enterprise.enclave.model.llada8b</string>
+    <key>display_name</key>
+    <string>depot Model Weights: LLaDA-8B</string>
+    <key>description</key>
+    <string>Frontier diffusion language model weights hydrated via UID 702 content-addressed transport.</string>
+    <key>version</key>
+    <string>1.0.0</string>
+    <key>requires</key>
+    <array>
+        <string>com.enterprise.enclave.core</string>
+    </array>
+    <key>installcheck_script</key>
+    <string>#!/bin/sh
+set -u
+PATH=/usr/bin:/bin:/usr/sbin:/sbin
+export PATH
+MODEL=/opt/enterprise/enclave/cas/models/llada-8b-instruct
+STATUS=/var/run/enclave/jobs/hydration-status.json
+# Munki: 1 skips installation. This is a local progress observation only;
+# the runner must independently verify TUF/model provenance before admission.
+# Mere file existence, stale status for another target, or daemon health is
+# insufficient to establish that this hydration job completed.
+[ -f "$MODEL" ] &amp;&amp; [ -s "$MODEL" ] &amp;&amp; [ ! -L "$MODEL" ] || exit 0
+[ -f "$STATUS" ] &amp;&amp; [ ! -L "$STATUS" ] || exit 0
+JSON=$(/bin/cat "$STATUS" 2&gt;/dev/null) || exit 0
+extract() { printf '%s' "$JSON" | /usr/bin/plutil -extract "$1" raw -o - - 2&gt;/dev/null; }
+TARGET=$(extract target) || exit 0
+PROFILE=$(extract profile) || exit 0
+STATE=$(extract status) || exit 0
+[ "$TARGET" = llada-8b-instruct ] &amp;&amp; [ "$PROFILE" = L1 ] &amp;&amp; [ "$STATE" = completed ] || exit 0
+if extract error &gt;/dev/null 2&gt;&amp;1; then exit 0; fi
+TOTAL=$(extract bytes_total) || exit 0
+SYNCED=$(extract bytes_synced) || exit 0
+PERCENT=$(extract percent) || exit 0
+BAO=$(extract bao_root) || exit 0
+case "$TOTAL:$SYNCED" in *[!0-9:]*|:*|*:) exit 0 ;; esac
+[ "${#TOTAL}" -le 18 ] &amp;&amp; [ "${#SYNCED}" -le 18 ] || exit 0
+[ "$TOTAL" -gt 0 ] &amp;&amp; [ "$SYNCED" -eq "$TOTAL" ] || exit 0
+case "$PERCENT" in 100|100.0) ;; *) exit 0 ;; esac
+[ "${#BAO}" -eq 64 ] || exit 0
+case "$BAO" in *[!0-9a-f]*) exit 0 ;; esac
+SIZE=$(/usr/bin/stat -f %z "$MODEL" 2&gt;/dev/null) || exit 0
+[ "$SIZE" -eq "$TOTAL" ] 2&gt;/dev/null || exit 0
+exit 1
+    </string>
+    <key>postinstall_script</key>
+    <string>#!/bin/sh
+/opt/enterprise/enclave/bin/depot-enclave deploy hydrate --profile L1 --target llada-8b-instruct --async
+# The CLI uses 30 for a successfully queued asynchronous operation.
+RESULT=$?
+case "$RESULT" in 0|30) exit 0 ;; *) exit "$RESULT" ;; esac
+    </string>
+    <key>uninstall_script</key>
+    <string>#!/bin/sh
+rm -f /opt/enterprise/enclave/cas/models/llada-8b-instruct
+exit 0
+    </string>
+</dict>
+</plist>

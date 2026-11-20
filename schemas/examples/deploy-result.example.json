@@ -1,0 +1,20 @@
+{
+  "verb": "preflight",
+  "profile": "L1",
+  "exit_code": 0,
+  "status": "ok",
+  "summary": "Preflight hardware and platform gates passed on Apple Silicon",
+  "details": {
+    "target_model": "llada-8b-instruct",
+    "target_model_footprint_bytes": 16000000000
+  },
+  "timestamp": 1794019200,
+  "darwin_preflight": {
+    "hw_tier": "Mid",
+    "mem_bytes": 34359738368,
+    "disk_free_bytes": 120000000000,
+    "filevault": true,
+    "sip": true,
+    "console_uid": 501
+  }
+}

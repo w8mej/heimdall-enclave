@@ -1,0 +1,95 @@
+name: "🛡️ Security Finding / Hardening Proposal"
+description: "Report a defense-in-depth finding, threat model gap, or security boundary hardening proposal."
+title: "[SEC]: "
+labels: ["security", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### ⚠️ CRITICAL NOTICE FOR SECURITY RESEARCHERS
+        If you have discovered an **active remote exploit, zero-day, or bypass of a production security boundary**, **DO NOT file a public issue**.
+        Please use [GitHub Private Vulnerability Reporting](https://github.com/w8mej/heimdall-enclave/security/advisories/new) or follow our coordinated disclosure policy in [`SECURITY.md`](../SECURITY.md).
+
+        Use this template **only** for defense-in-depth improvements, non-embargoed threat model updates, code hardening, or public audit remediations.
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Security Severity Estimate
+      description: Assess the potential security impact based on project taxonomy.
+      options:
+        - "sev/low — Minor flaw, defense-in-depth enhancement"
+        - "sev/medium — Moderate security flaw with mitigating controls"
+        - "sev/high — High impact policy bypass or isolation weakness"
+        - "sev/critical — Immediate trust boundary collapse (STOP: use Private Advisory)"
+    validations:
+      required: true
+  - type: dropdown
+    id: subsystem
+    attributes:
+      label: Target Subsystem / Daemon
+      description: Which enclave boundary or LaunchDaemon is affected?
+      options:
+        - "UID 701: enclave-model-runnerd (Model Adapter & Loopback Gateway)"
+        - "UID 702: enclave-swarm-syncd (Swarm CAS, TUF, & Network Egress)"
+        - "UID 703: enclave-custody-vaultd (Touch ID, SEP Custody, Monotonic Counters)"
+        - "UID 704: enclave-agent-runtime (Cedar/Biscuit IFC & Context Heap)"
+        - "UID 705: enclave-zk-auditor (Plonky3 ZK Proofs & DFA Redaction)"
+        - "Darwin Kernel: Seatbelt (.sb) Sandbox & pfctl Packet Filter"
+        - "Supervisor & IPC: Mach bootstrap, LOCAL_PEERTOKEN, depot-enclave"
+        - "Cryptographic Primitives: ML-KEM-768, X25519 HPKE, Ed25519, DPoP"
+    validations:
+      required: true
+  - type: dropdown
+    id: trust_boundary
+    attributes:
+      label: Threat Model Trust Boundary
+      description: Which STRIDE trust boundary is involved?
+      options:
+        - "TB-01: Agent Client <-> Client Gateway (mTLS / HTTP Unix Socket)"
+        - "TB-02: Client Gateway <-> Model Runner (UID 701)"
+        - "TB-03: Model Runner <-> Upstream LLM / LoRA Adapter"
+        - "TB-04: Agent Runtime (UID 704) <-> Tool Host (POSIX Subprocesses)"
+        - "TB-05: Custody Vault (UID 703) <-> Apple Secure Enclave (SEP)"
+        - "TB-06: Custody Vault (UID 703) <-> Biometric Sensor (Touch ID)"
+        - "TB-07: Swarm Sync (UID 702) <-> Remote CAS Peers (Internet Egress)"
+        - "TB-08: ZK Auditor (UID 705) <-> Audit Journal Storage"
+        - "TB-09: Mach Kernel <-> Enclave Daemons (Exception Ports)"
+        - "TB-10: Supervisor <-> Daemons (UID 0 / launchd)"
+        - "TB-11: Physical Host <-> USB Key / Touch ID"
+        - "TB-12: Cold Boot / NVRAM Rollback Boundary"
+    validations:
+      required: true
+  - type: checkboxes
+    id: stride_category
+    attributes:
+      label: STRIDE Threat Classification
+      description: Select all threat classifications that apply.
+      options:
+        - label: "Spoofing (e.g. Identity, Token, or Peer Impersonation)"
+        - label: "Tampering (e.g. Memory corruption, AST tampering, payload alteration)"
+        - label: "Repudiation (e.g. Audit journal truncation, hash chain forging)"
+        - label: "Information Disclosure (e.g. Side-channel, PII leakage, timing oracle)"
+        - label: "Denial of Service (e.g. RSS ceiling exhaustion, CPU loop, deadlock)"
+        - label: "Elevation of Privilege (e.g. UID bypass, capability escape)"
+  - type: textarea
+    id: finding_description
+    attributes:
+      label: Vulnerability Mechanism & Architectural Impact
+      description: Provide an exact technical explanation of the flaw and how it affects enclave invariants.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction_poc
+    attributes:
+      label: Proof of Concept / Test Case
+      description: Provide a minimal failing test case, script, or sequence of API calls demonstrating the issue.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: proposed_hardening
+    attributes:
+      label: Proposed Hardening / Defense-in-Depth Fix
+      description: Suggest concrete architectural changes, code diffs, or policy rules to mitigate this finding.
+    validations:
+      required: false

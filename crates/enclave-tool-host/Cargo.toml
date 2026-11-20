@@ -1,0 +1,41 @@
+[package]
+name = "enclave-tool-host"
+description = "Zero-JIT WASI tool host and execution ticket verifier (ADR-011, GAP-18)"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[features]
+# Offline build tool only. Production daemon builds do not enable a compiler.
+offline-builder = ["wasmtime/cranelift", "wasmtime/wat"]
+
+[[bin]]
+name = "enclave-tool-build"
+path = "src/bin/enclave-tool-build.rs"
+required-features = ["offline-builder"]
+
+[dependencies]
+enclave-core = { path = "../enclave-core" }
+enclave-crypto = { path = "../enclave-crypto" }
+enclave-zk-auditor = { path = "../enclave-zk-auditor" }
+wasmtime.workspace = true
+hex.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+serde_bytes.workspace = true
+blake3.workspace = true
+ed25519-dalek.workspace = true
+rand_core.workspace = true
+redb = "2.6.4"
+libc.workspace = true
+zeroize.workspace = true
+
+[lints]
+workspace = true
+
+[dev-dependencies]
+tempfile = "3"
+# Offline artifact fixture compiler used only by tests; production stays zero-JIT.
+wasmtime = { workspace = true, features = ["cranelift", "wat"] }

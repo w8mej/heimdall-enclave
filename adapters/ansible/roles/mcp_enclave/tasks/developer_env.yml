@@ -1,0 +1,12 @@
+---
+# The production IPC mesh is restricted to daemon principals. Developer clients
+# require the separately provisioned client gateway (F97); do not export an
+# unreachable daemon socket or widen peer admission to make it work.
+- name: Remove obsolete global daemon-socket exports
+  ansible.builtin.blockinfile:
+    path: "{{ item }}"
+    marker: "# {mark} ANSIBLE MANAGED depot ENVIRONMENT"
+    state: absent
+  loop:
+    - /etc/zshrc
+    - /etc/profile

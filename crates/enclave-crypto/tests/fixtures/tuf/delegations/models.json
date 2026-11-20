@@ -1,0 +1,23 @@
+{
+  "signatures": [
+    {
+      "keyid": "ea640c81661e57e622c1b2706e5b816340c480273050b6862c0990d2f0a75cd4",
+      "sig": "2dde4ef4ec51c4d41b162b8f1aa12a28272ce5c753baa19ae9afec01d753047656272407cffda27730a986ac81931e622664714ea9faeae3a521c1b25bd4390d"
+    }
+  ],
+  "signed": {
+    "_type": "targets",
+    "expires": "2035-01-01T00:00:00Z",
+    "spec_version": "1.0.31",
+    "targets": {
+      "models/model.safetensors": {
+        "hashes": {
+          "blake3": "11fce9aadcc4714b12b9a7a7d0cbb9785fd8417e596838d8cb47cca1ae7f13ba",
+          "sha256": "f835169442db01155c6fd38623ed126d6a4190a56bedf8a8bba9cbcc7f6569b2"
+        },
+        "length": 26
+      }
+    },
+    "version": 1
+  }
+}

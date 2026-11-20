@@ -1,0 +1,15 @@
+#!/bin/sh
+# postinstall — Run canonical bootstrap orchestration (FS-706 / D-R10)
+set -eu
+
+echo "postinstall: Executing depot Enclave bootstrap..."
+
+# Canonical installer owns provisioning and permissions. Never recursively
+# transfer a trust-anchor directory to the daemon it constrains.
+PROFILE=L2
+# Build-pkg renders this fixed closed-set profile; installer environment cannot override it.
+CLI=/opt/enterprise/enclave/bin/depot-enclave
+[ -x "$CLI" ] || { echo "postinstall: real CLI missing"; exit 20; }
+# No checkout-dependent bootstrap or reduced standalone path.
+"$CLI" deploy install --profile "$PROFILE"
+"$CLI" deploy verify --profile "$PROFILE"

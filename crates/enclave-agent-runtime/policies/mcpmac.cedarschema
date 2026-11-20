@@ -1,0 +1,58 @@
+// depot v3.0 Cedar schema (ADR-008: .cedar + .cedarschema is the only v3.0
+// policy bundle format). Labels are encoded as ranks: C1..C4 => 1..4,
+// T0..T3 => 0..3, profiles L1..L3 => 1..3, action classes A1..A4 => 1..4.
+namespace depot {
+  entity Agent = {
+    "depth": Long,
+    "role": String,
+  };
+  entity Tool = {
+    "action_class": Long,
+    "sink_clearance": Long,
+    "namespace": String,
+    "mutates_root": Bool,
+  };
+  type CallContext = {
+    "input_c": Long,
+    "input_t": Long,
+    "ast_taint": Long,
+    "row_count": Long,
+    "qif_mb": Long,
+    "profile": Long,
+    "hw_grant": Bool,
+    "target_namespace": String,
+  };
+  action InvokeTool appliesTo {
+    principal: [Agent],
+    resource: [Tool],
+    context: CallContext,
+  };
+  action DeclassifyEnum appliesTo {
+    principal: [Agent],
+    resource: [Tool],
+    context: CallContext,
+  };
+  action ActuateGui appliesTo {
+    principal: [Agent],
+    resource: [GuiTarget],
+    context: CallContext,
+  };
+  entity GuiTarget = {
+    "app_bundle_id": String,
+    "ax_role": String,
+    "url_origin": String,
+  };
+}
+
+namespace Custody {
+  // A workflow carries no caller-settable attributes (GAP-05): the signed
+  // policy names permitted workflows by entity id.
+  entity Workflow;
+  action ReversibleTokenize appliesTo {
+    principal: [depot::Agent],
+    resource: [Workflow],
+    context: {
+      "profile": Long,
+    },
+  };
+}

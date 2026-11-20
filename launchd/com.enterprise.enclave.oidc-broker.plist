@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+<key>Label</key><string>com.enterprise.enclave.oidc-broker</string>
+<key>ProgramArguments</key><array>
+<string>/Library/Application Support/EnterpriseEnclave/EnclaveOIDC.app/Contents/MacOS/enclave-oidc</string>
+<string>--identity-config</string><string>/Library/Application Support/EnterpriseEnclave/oidc-broker-identity.json</string>
+<string>--oauth-config</string><string>/Library/Application Support/EnterpriseEnclave/oidc-oauth.json</string>
+</array>
+<key>LimitLoadToSessionType</key><string>Aqua</string>
+<key>RunAtLoad</key><true/>
+<key>KeepAlive</key><false/>
+<key>ProcessType</key><string>Interactive</string>
+<key>SoftResourceLimits</key><dict><key>Core</key><integer>0</integer></dict>
+<key>HardResourceLimits</key><dict><key>Core</key><integer>0</integer></dict>
+</dict></plist>

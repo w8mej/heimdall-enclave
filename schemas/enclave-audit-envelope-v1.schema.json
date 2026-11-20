@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://depot.invalid/schemas/enclave-audit-envelope-v1.schema.json",
+  "title": "EnclaveAuditEnvelopeV1",
+  "description": "Shared header for every line of /var/log/enclave/*-audit.jsonl (CORE-V3; F-024, F-039). v3.0 daemons MUST populate prev_blake3 and prev_poseidon2; the v1.0 Python simulation populates prev_sha256 and leaves the others null.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "v",
+    "daemon_uid",
+    "boot_epoch_id",
+    "log_seq_u64",
+    "rpc_seq_u64",
+    "ts_utc_ms",
+    "spiffe_id",
+    "prev_blake3",
+    "prev_poseidon2",
+    "payload"
+  ],
+  "properties": {
+    "v": {
+      "const": 1
+    },
+    "daemon_uid": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4294967295
+    },
+    "boot_epoch_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    },
+    "log_seq_u64": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 18446744073709551615
+    },
+    "rpc_seq_u64": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 18446744073709551615
+    },
+    "ts_utc_ms": {
+      "type": "integer",
+      "minimum": 1577836800000
+    },
+    "spiffe_id": {
+      "type": "string",
+      "pattern": "^spiffe://[a-z0-9.-]+/[A-Za-z0-9._/-]+$"
+    },
+    "prev_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "prev_blake3": {
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "prev_poseidon2": {
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "8 x KoalaBear u32 limbs, big-endian hex"
+    },
+    "payload": {
+      "type": "object"
+    }
+  }
+}

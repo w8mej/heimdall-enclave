@@ -1,0 +1,45 @@
+name: "🏛️ Architectural Decision / RFC Proposal"
+description: "Propose a formal architectural modification, protocol enhancement, or new feature specification."
+title: "[RFC]: "
+labels: ["rfc", "architecture"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Architectural proposals follow the rigor of **Enterprise Systems Design & Principal SRE** standards. All proposals must maintain mathematical, cryptographic, and memory-boundary invariants.
+  - type: input
+    id: spec_reference
+    attributes:
+      label: Normative Specification Reference
+      description: Which Feature Specification (`FS-701`–`FS-705`) or ADR does this proposal impact?
+      placeholder: "e.g., FS-704 §4.2 (QIF Sliding Budget) or ADR-014"
+    validations:
+      required: true
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Problem Statement & Motivation
+      description: What architectural gap, performance bottleneck, or new operational requirement does this address?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Detailed Technical Design & Invariants
+      description: Explain the data structures, protocol wire formats, state machines, and cryptographic flows.
+    validations:
+      required: true
+  - type: textarea
+    id: threat_model
+    attributes:
+      label: Threat Model & STRIDE Impact
+      description: How does this proposal impact existing trust boundaries (`TB-01`..`TB-12`) or introduce new adversary capabilities?
+    validations:
+      required: true
+  - type: textarea
+    id: performance_budget
+    attributes:
+      label: Performance & Memory Budget Analysis
+      description: How does this proposal preserve the strict $\le 152\text{ MiB}$ daemon RSS ceiling and $p99 \le 45\mu\text{s}$ SLO?
+    validations:
+      required: true

@@ -1,0 +1,356 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://depot.invalid/schemas/enclave-model.manifest.schema.json",
+  "title": "EnclaveModelManifestV1",
+  "description": "FS-701 \u00a73.2 adapter manifest. Tensor names are depot-owned enclave-pack namespaces, not upstream checkpoint names (F-009).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "v",
+    "model_id",
+    "execution_class",
+    "artifact",
+    "tensor_namespace",
+    "output_caps",
+    "calibration",
+    "license_policy"
+  ],
+  "properties": {
+    "v": {
+      "const": 1
+    },
+    "model_id": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "execution_class": {
+      "enum": [
+        "AR_CAUSAL",
+        "DISCRIMINATIVE_RLCD",
+        "DISCRETE_DIFFUSION",
+        "RECURRENT_SSM_TTT",
+        "BYTE_OR_CONCEPT",
+        "SPECULATIVE_OR_RECURRENT_DEPTH",
+        "JEPA_EBM_WORLD_PLANNER"
+      ]
+    },
+    "upstream_checkpoint": {
+      "type": "string",
+      "maxLength": 256
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cas_uri", "blake3", "sha256"],
+      "properties": {
+        "cas_uri": {
+          "type": "string",
+          "pattern": "^cas://blake3-bao-v1/[0-9a-f]{64}(\\?.*)?$"
+        },
+        "blake3": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "transport_ciphertext_bao_root": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "format": {
+          "enum": ["safetensors", "gguf", "mlpackage"]
+        }
+      }
+    },
+    "tensor_namespace": {
+      "type": "string",
+      "pattern": "^enclave_adapter\\.[a-z0-9_.]+$"
+    },
+    "stateless_across_rpc": {
+      "const": true,
+      "description": "AR_CAUSAL and all classes: no raw float/KV/state tensor may cross an RPC boundary (F-027)"
+    },
+    "output_caps": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_output_bytes"],
+      "properties": {
+        "max_output_bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65536
+        },
+        "max_diffusion_steps": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 64
+        },
+        "diffusion_deadline_ms": {
+          "description": "DISCRETE_DIFFUSION only. Wall-clock bound on one generation; bind refuses a value above the profile ceiling (L1 20000, L2 10000, L3 5000). Default 2000.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20000
+        },
+        "max_concept_patches": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4096
+        },
+        "max_steps": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 32
+        }
+      }
+    },
+    "calibration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ece_max", "bins", "binning", "dataset"],
+      "properties": {
+        "ece_max": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 0.015
+        },
+        "bins": {
+          "const": 15
+        },
+        "binning": {
+          "const": "equal_mass"
+        },
+        "dataset": {
+          "const": "enclave-calib-eval-v1"
+        },
+        "ece_calibration_lut_blake3": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "max_provenance_fanin": {
+      "type": "integer",
+      "maximum": 64,
+      "default": 64
+    },
+    "world_planner_caps": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_horizon",
+        "max_candidates",
+        "max_cem_iters",
+        "e_max",
+        "step_wallclock_ms",
+        "tau_surprise"
+      ],
+      "properties": {
+        "max_horizon": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5
+        },
+        "max_candidates": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 64
+        },
+        "max_cem_iters": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "e_max": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1000.0
+        },
+        "step_wallclock_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 150
+        },
+        "tau_surprise": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "actuation_sandbox": {
+          "const": "cdp_browser"
+        }
+      }
+    },
+    "companion_safety_layers": {
+      "type": "array",
+      "maxItems": 16,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["role", "cas_uri", "eager_hydrate_required"],
+        "properties": {
+          "role": {
+            "type": "string",
+            "maxLength": 64
+          },
+          "cas_uri": {
+            "type": "string",
+            "pattern": "^cas://blake3-bao-v1/[0-9a-f]{64}(\\?.*)?$"
+          },
+          "eager_hydrate_required": {
+            "type": "boolean"
+          },
+          "max_size_mib": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 48
+          }
+        }
+      }
+    },
+    "license_policy": {
+      "$ref": "#/definitions/license_policy"
+    },
+    "auxiliary_wrappers": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": ["SPECULATIVE_OR_RECURRENT_DEPTH"]
+      }
+    },
+    "topology_fingerprint_blake3": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "apple_silicon_dispatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "min_chip": {
+          "enum": ["M1", "M2", "M3", "M4", "M5"]
+        },
+        "min_unified_ram_gb": {
+          "type": "integer",
+          "minimum": 8
+        },
+        "preferred_backend": {
+          "enum": ["MLX_METAL", "COREML_ANE", "COREML_GPU"]
+        },
+        "ane_mil_subgraphs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "security_controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "min_swarm_profile": {
+          "enum": ["L1", "L2", "L3"]
+        },
+        "qif_max_millibits_per_record": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 12000
+        },
+        "ssm_anchor_reinject_tokens": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2048
+        },
+        "ssm_zeroize_on_taint_exit": {
+          "const": true
+        },
+        "max_recurrent_depth_nominal": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 32
+        },
+        "max_recurrent_depth_fair_thermal": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8
+        },
+        "anchor_mix_alpha": {
+          "type": "number",
+          "minimum": 0.25,
+          "maximum": 1.0
+        },
+        "smooth_lcm_sigma_min": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "sonar_canary_cos_threshold": {
+          "type": "number",
+          "minimum": 0.5,
+          "maximum": 1.0
+        },
+        "threshold_margin_fail_closed": {
+          "type": "number",
+          "minimum": 0.001
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "execution_class": {
+            "const": "JEPA_EBM_WORLD_PLANNER"
+          }
+        }
+      },
+      "then": {
+        "required": ["world_planner_caps"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "execution_class": {
+            "const": "DISCRETE_DIFFUSION"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "output_caps": {
+            "required": ["max_output_bytes", "max_diffusion_steps"]
+          }
+        }
+      }
+    }
+  ],
+  "definitions": {
+    "license_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["spdx_id", "allow_p2p_seeding"],
+      "properties": {
+        "spdx_id": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "allow_p2p_seeding": {
+          "type": "boolean",
+          "default": false
+        },
+        "attribution_notice_blake3": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,37 @@
+---
+- name: Verify Apple Silicon Host Architecture
+  ansible.builtin.assert:
+    that:
+      - ansible_architecture == 'arm64'
+      - ansible_os_family == 'Darwin'
+    fail_msg: "depot Enclave requires Apple Silicon macOS."
+
+- name: Evaluate Pre-Flight Readiness
+  ansible.builtin.command:
+    cmd: >
+      {{ enclave_bin_path }} deploy preflight
+      --profile {{ enclave_profile }}
+  register: preflight_res
+  changed_when: false
+  failed_when: preflight_res.rc != 0
+
+- name: Execute Enclave Bootstrap Orchestration
+  ansible.builtin.command:
+    cmd: >
+      {{ enclave_bin_path }} deploy install
+      --profile {{ enclave_profile }}
+  register: bootstrap_run
+  changed_when: >
+    'complete' in bootstrap_run.stdout or
+    'bootstrapped' in bootstrap_run.stdout
+
+- name: Configure Developer Environment Variables
+  ansible.builtin.include_tasks: developer_env.yml
+
+- name: Hydrate Frontier Model Weights
+  ansible.builtin.include_tasks: model_deploy.yml
+
+- name: Verify Post-Install Health
+  ansible.builtin.command:
+    cmd: "{{ enclave_bin_path }} deploy verify --profile {{ enclave_profile }}"
+  changed_when: false

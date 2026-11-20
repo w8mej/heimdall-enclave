@@ -1,0 +1,166 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://depot.invalid/schemas/compliance-rollup-proof-v1.schema.json",
+  "title": "ComplianceRollupProofV1 (JSON view of the CBOR frame)",
+  "description": "FS-705 §3.5.1/§7.3 / YKD-10. Complete binary CBOR frames are at most 327680 bytes, including headers, public inputs, anchors and padding; L3 is exactly 327680 bytes and carries no static hardware identifiers. This JSON view cannot establish actual aggregate wire length; the codec must measure final bytes.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "v",
+    "encoding",
+    "profile",
+    "public_inputs",
+    "proof_bytes_len",
+    "padded_frame_bytes"
+  ],
+  "properties": {
+    "v": {
+      "enum": [1, 2],
+      "description": "1: legacy non-hiding accounting; 2: production hiding accounting with a distinct verifier key. Neither version establishes the complete authenticated compliance relation."
+    },
+    "encoding": {
+      "const": "cbor"
+    },
+    "profile": {
+      "enum": [2, 3]
+    },
+    "public_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "vk_digest",
+        "policy_blake3",
+        "tuf_snapshot_root",
+        "qif_cap_mb",
+        "R_fleet_pk",
+        "J_prev",
+        "J_curr",
+        "nullifier_e"
+      ],
+      "properties": {
+        "vk_digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "policy_blake3": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "tuf_snapshot_root": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "qif_cap_mb": {
+          "const": 12000
+        },
+        "R_fleet_pk": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "J_prev": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "J_curr": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "nullifier_e": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "redaction_checked": {
+          "type": "string",
+          "enum": ["native", "in_circuit"]
+        },
+        "used_in": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 12000
+        },
+        "used_out": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 12000
+        }
+      }
+    },
+    "field": {
+      "const": "KoalaBear^5"
+    },
+    "fri": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "blowup": {
+          "const": 4
+        },
+        "queries": {
+          "const": 84,
+          "description": "Configured FRI parameters:84 queries,16-bit query proof-of-work,rho=1/4. No overall security-level proof is implied."
+        },
+        "pow_bits": {
+          "const": 16
+        }
+      }
+    },
+    "proof_bytes_len": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 327680
+    },
+    "padded_frame_bytes": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 327680
+    },
+    "cohort_size": {
+      "type": "integer",
+      "minimum": 32
+    },
+    "heartbeat": {
+      "type": "boolean"
+    },
+    "hardware_batch_anchor_sigs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9a-f]+$"
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": 3
+          }
+        }
+      },
+      "then": {
+        "required": ["cohort_size", "heartbeat"],
+        "properties": {
+          "padded_frame_bytes": {
+            "const": 327680
+          }
+        },
+        "not": {
+          "required": ["hardware_batch_anchor_sigs"]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profile": {
+            "const": 2
+          }
+        }
+      },
+      "then": {
+        "required": ["hardware_batch_anchor_sigs"]
+      }
+    }
+  ]
+}

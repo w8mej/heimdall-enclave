@@ -1,0 +1,53 @@
+[package]
+name = "depot-enclave"
+description = "Operator CLI: daemon lifecycle (dev + launchd), TUF refresh, model admission, custodian enrollment, audit verification"
+default-run = "depot-enclave"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[[bin]]
+name = "depot-enclave"
+path = "src/main.rs"
+
+[[bin]]
+name = "enclave-pack"
+path = "src/bin/enclave-pack.rs"
+
+[[bin]]
+name = "enclave-cdp-browser"
+path = "src/bin/enclave-cdp-browser.rs"
+
+[features]
+default = []
+# Development fleet (`--dev`): same-UID daemons with simulated custody
+# hardware. Never enabled for release / signed builds (GAP-03).
+simulation = ["enclave-custody-vaultd/simulation", "enclave-zk-auditor/simulation", "enclave-agent-runtime/simulation"]
+
+[dependencies]
+enclave-core = { path = "../enclave-core" }
+enclave-crypto = { path = "../enclave-crypto" }
+enclave-model-runnerd = { path = "../enclave-model-runnerd" }
+enclave-swarm-syncd = { path = "../enclave-swarm-syncd" }
+enclave-custody-vaultd = { path = "../enclave-custody-vaultd" }
+enclave-agent-runtime = { path = "../enclave-agent-runtime" }
+enclave-client-gateway = { path = "../enclave-client-gateway" }
+enclave-zk-auditor = { path = "../enclave-zk-auditor" }
+clap.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+serde_bytes.workspace = true
+hex.workspace = true
+blake3.workspace = true
+sha2.workspace = true
+ed25519-dalek.workspace = true
+rand_core.workspace = true
+libc.workspace = true
+
+[dev-dependencies]
+depot-enclave = { path = ".", features = ["simulation"] }
+
+[lints]
+workspace = true

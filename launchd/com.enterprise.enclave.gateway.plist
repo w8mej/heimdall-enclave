@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plist version="1.0"><dict>
+<key>Label</key><string>com.enterprise.enclave.gateway</string>
+<key>ProgramArguments</key><array>
+<string>/opt/enterprise/enclave/bin/enclave-client-gateway</string>
+<string>--socket-dir</string>
+<string>/var/run/enclave</string>
+<string>--sandbox-profile</string>
+<string>/opt/enterprise/enclave/sandbox/gateway.sb</string>
+</array><key>UserName</key><string>_enclaveingress</string><key>GroupName</key><string>_enclaveingress</string>
+<key>InitGroups</key><true/><key>RunAtLoad</key><true/><key>KeepAlive</key><dict><key>SuccessfulExit</key><false/></dict><key>ThrottleInterval</key><integer>30</integer><key>ProcessType</key><string>Background</string><key>Umask</key><integer>63</integer>
+<key>SoftResourceLimits</key><dict><key>Core</key><integer>0</integer></dict>
+<key>HardResourceLimits</key><dict><key>Core</key><integer>0</integer></dict>
+<key>StandardOutPath</key><string>/var/log/enclave/gateway/gateway.log</string>
+<key>StandardErrorPath</key><string>/var/log/enclave/gateway/gateway.log</string>
+</dict></plist>

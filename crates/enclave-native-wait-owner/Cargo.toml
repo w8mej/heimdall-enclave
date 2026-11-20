@@ -1,0 +1,26 @@
+[package]
+name = "enclave-native-wait-owner"
+description = "Dedicated strict child wait custody source proposal; administrative admission remains unavailable"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+autolib = false
+autobins = false
+autoexamples = false
+autotests = false
+autobenches = false
+
+[[bin]]
+name = "enclave-native-wait-owner"
+path = "src/main.rs"
+
+[features]
+default = []
+
+[dependencies]
+libc = { version = "=0.2.191", default-features = false, features = ["std"] }
+
+[lints]
+workspace = true

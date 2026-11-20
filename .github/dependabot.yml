@@ -1,0 +1,44 @@
+# Dependabot automated dependency security updates
+version: 2
+updates:
+  # Maintain Cargo workspace dependencies (Rust crates)
+  - package-ecosystem: "cargo"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "America/Los_Angeles"
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "deps(cargo)"
+      include: "scope"
+    ignore:
+      # Pinned ecosystem dependencies with tracked security ledger entries
+      - dependency-name: "crypto-bigint"
+        versions: ["0.5.5"]
+      - dependency-name: "biscuit-auth"
+        versions: ["6.0.0"]
+
+  # Maintain GitHub Actions workflow dependencies (pinned by commit SHA)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "America/Los_Angeles"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "ci(actions)"
+      include: "scope"
+
+  # Maintain Python simulation dependencies
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps(pip)"
+      include: "scope"

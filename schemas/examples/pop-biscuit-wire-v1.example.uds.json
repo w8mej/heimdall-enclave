@@ -1,0 +1,13 @@
+{
+  "v": 1,
+  "sealed_biscuit": "En0KEwoEMTIzNBgDIgkKBwgKEgMYgAgSJAgAEiBRb3R",
+  "seq_u64": 42,
+  "args_blake3": "9999999999999999999999999999999999999999999999999999999999999999",
+  "pop_sig_ed25519": "abababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababab",
+  "hop": 2,
+  "transport": "uds",
+  "clock": {
+    "local_boot_id": "6fe7229d-f77c-47ec-b370-69c20118296e",
+    "mach_continuous_time_ns_expiry": 3600000000000
+  }
+}

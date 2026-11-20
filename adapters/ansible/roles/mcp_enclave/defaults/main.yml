@@ -1,0 +1,7 @@
+---
+# Defaults for role depot_enclave
+enclave_profile: "L1"
+enclave_target_model: "llada-8b-instruct"
+enclave_bin_path: "/opt/enterprise/enclave/bin/depot-enclave"
+enclave_pkg_src: "depot-Enclave-3.0.0.pkg"
+enclave_async_hydration: true

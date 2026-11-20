@@ -1,0 +1,8 @@
+{
+  "job_id": "hyd-20261106-001",
+  "target": "llada-8b-instruct",
+  "profile": "L1",
+  "created_at": 1794019200,
+  "source": "r2",
+  "dmg_path": "/opt/enterprise/enclave/staging/model.dmg"
+}

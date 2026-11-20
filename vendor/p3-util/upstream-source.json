@@ -1,0 +1,40 @@
+{
+  "package": "p3-util",
+  "version": "0.8.0",
+  "source": "registry+https://github.com/rust-lang/crates.io-index",
+  "archive_sha256": "b2deb6b0e30be32c696ab3cd443cc6f10b2ffce0faa31d37bd59e58789dd6df1",
+  "vcs": {
+    "git": {
+      "sha1": "a21e3ed42905040ad49c519e402f018381c12d0c"
+    },
+    "path_in_vcs": "util"
+  },
+  "original_files_sha256": {
+    ".cargo_vcs_info.json": "004a93bfb129647778d48659b8599ec387801e96ce0cbfadca065145bafb675e",
+    "CHANGELOG.md": "a8019eb46e1d352afc059ddf5c3c9e20766fa799a2a3eecb8f758d809f591011",
+    "Cargo.toml": "6b9548b72d251efcf2032b7de986039d3bb0741c9a4f2ea3c9ef7a0d281ac3c7",
+    "Cargo.toml.orig": "73827c9a67c39caa7fe7578861f16d95d9686b006812c21828265c7cd4c58e79",
+    "benches/bit_reverse.rs": "2f13c47bb268cc5f78c53796f9604fffad834e9eaeb5fea100a3384a31a73a9b",
+    "benches/transpose.rs": "7c0045a0eac02f95609c1db59d5c4615fb37ad95bf7bf2776755d01fba9468ba",
+    "src/array_serialization.rs": "7c56da348cc20f744927d8c4a8c21e7261cfe98835ecfb4417c46c37e8447b69",
+    "src/lib.rs": "90b8eb9a0f0883e1b20ce0d59bdbdb2bda6eb94be10c6eac78ccea2626aed6f6",
+    "src/linear_map.rs": "b0a88cbfc2d64c966c14bb63ab65cbb5a600a321a2f9106ce007c0fe00fec2f3",
+    "src/transpose/mod.rs": "deef19011babc7ce4d9b4cb7333ddf19ec0e3fc8fce3338197a7f843083f6824",
+    "src/transpose/portable.rs": "2df4329d0433823526c91bd74f6b2c774e14800821da0a75f33318f77d9845a3",
+    "src/transpose/rectangular.rs": "b808f71124fbee3a00b9f7f5cecdf0268bd8a1e5e3871ce8685b4c39371eda42",
+    "src/transpose/square.rs": "a8639d9d4264928edc72210ca0eb1183aa0f5e60afcf43212d3df9fb495ed517",
+    "src/zip_eq.rs": "e80e4f1fb3e023e8fa4bbbeadd96f301e62a7331fde18a92474f027d455075a4"
+  },
+  "excluded_registry_files": [
+    ".cargo-ok",
+    ".cargo-checksum.json",
+    "Cargo.lock"
+  ],
+  "modified_files": ["src/lib.rs"],
+  "added_files": [
+    "LICENSE-MIT",
+    "LICENSE-APACHE",
+    "depot-PATCH.md",
+    "upstream-source.json"
+  ]
+}
